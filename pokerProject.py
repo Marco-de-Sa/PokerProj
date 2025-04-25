@@ -60,7 +60,7 @@ class GameDeck:
     def sort_deck(self):
         # wip not ready for use(will work if used however just not in it's final state)
         # possible solution is to get every suit into it's own list and sort them by their numbers and then rejoin them in a specific order
-        # todo add a method to sort the cards by suit and not just number
+        # todo add a method to sort the cards by suit and number
         # todo allow add new methods of sorting from what we have learned so far and let the user choose between them
         tempDeck = []
         for i in range(len(self.deck)):
