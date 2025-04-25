@@ -90,5 +90,13 @@ my_hand = GameDeck() # makes a new object of the GameDeck class
 
 # testing commit
 
+my_hand.count_suit("hearts")
+my_hand.shuffle()
+print(my_hand.to_string())
+tem = my_hand.deal_cards(5)
+print(my_hand.to_string())
+print(tem)
+my_hand.rejoin(tem)
+print(my_hand.to_string())
 my_hand.sort_deck()
 print(my_hand.to_string())
