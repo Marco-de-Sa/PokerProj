@@ -22,12 +22,16 @@ class GameDeck:
             which is returned
     """
     def __init__(self):
-        spCard = {1: "ace", 2: "jack", 3: "queen", 4: "king"}
-        suit = {1: "clubs", 2: "spades", 3: "hearts", 4: "diamonds"}
-        deck = [f"{spCard[1]} of {suit[i]}" for i in range(1, 5)]
+        # todo remove the for loops for building the deck and replace it with a standard list declaration
+        # before anyone says it yes I know this below is redundant. I could have manually typed all this out
+        spCard = {1: "ace", 2: "jack", 3: "queen", 4: "king"} # this dictionary contains all types of cards that do not begin with a number
+        suit = {1: "clubs", 2: "spades", 3: "hearts", 4: "diamonds"} # a dictionary that stores all possible suits of cards
+        deck = [f"{spCard[1]} of {suit[i]}" for i in range(1, 5)] # adds aces to the game deck
+        # following code adds all the cards that begin with numbers
         for i in range(2, 11):
             for j in range(1, 5):
                 deck.append(f"{i} of {suit[j]}")
+        # following code adds all cards that begin with special card types except for the ace
         for i in range(2, 5):
             for j in range(1, 5):
                 deck.append(f"{spCard[i]} of {suit[j]}")
@@ -36,11 +40,11 @@ class GameDeck:
         self.suit = suit
 
     def count_suit(self, target):
-        temp = 0
-        for i in self.deck:
-            if i.split(" ")[1] == target:
+        temp = 0 # this variable keeps count of every time a card of target suit is found
+        for i in self.deck: # iterates through the deck and checks where the last index is equal to the target String
+            if i.split(" ")[-1] == target:
                 temp += 1
-        print(f"There are {temp} cards belonging to {target} remaining in the deck")
+        print(f"There are {temp} cards belonging to {target} remaining in the deck") # prints out the amount of cards belonging to the target suit
 
     def rejoin(self, hand):
         for i in range(len(hand)): # takes the iterates through the hand indexes
