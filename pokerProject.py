@@ -80,6 +80,15 @@ class GameDeck:
             self.deck[ind1] = self.deck[ind2]
             self.deck[ind2] = temp
 
+        # todo below is the fisher yates method of shuffling it is as I have found to be the most efficient method of shuffling find a way to implement it
+        # numbers = list(range(n))
+        # shuffled = []
+        # while numbers:
+        # k = randint(0, len(numbers) - 1)
+        # shuffled.append(numbers[k])
+        # numbers.pop(k)
+        # return shuffled
+
     def __str__(self): # this method overwrites the default __str__ method to instead return the string below
         return f"{self.deck}" # returns the deck as a string
 
