@@ -1,13 +1,15 @@
 from random import randint
 
 # todo add a class dedicated to handling the cards dealt to the player and by extension detecting what hands they have
-# todo add a way to count how many times specific hands have been encountered
+# todo add a way to count how many times specific hands have been encountered preferably in the above mentioned player hand class
 
 class GameDeck:
     """
     This is the class that handles all operations that the deck of cards will need to undertake.
     The code that handles the hand of the player will most likely be in a different area.
     A brief description of the methods:
+
+    this will probably need rewriting after the class is done
 
     __init__: will be automatically used on a new object of this class being made
     count_suit: counts the number of cards belonging to a specific suit that remain in the deck
@@ -22,22 +24,10 @@ class GameDeck:
             which is returned
     """
     def __init__(self):
-        # todo remove the for loops for building the deck and replace it with a standard list declaration
-        # before anyone says it yes I know this below is redundant. I could have manually typed all this out
-        spCard = {1: "ace", 2: "jack", 3: "queen", 4: "king"} # this dictionary contains all types of cards that do not begin with a number
-        suit = {1: "clubs", 2: "spades", 3: "hearts", 4: "diamonds"} # a dictionary that stores all possible suits of cards
-        deck = [f"{spCard[1]} of {suit[i]}" for i in range(1, 5)] # adds aces to the game deck
-        # following code adds all the cards that begin with numbers
-        for i in range(2, 11):
-            for j in range(1, 5):
-                deck.append(f"{i} of {suit[j]}")
-        # following code adds all cards that begin with special card types except for the ace
-        for i in range(2, 5):
-            for j in range(1, 5):
-                deck.append(f"{spCard[i]} of {suit[j]}")
-        self.deck = deck
-        self.spCard = spCard
-        self.suit = suit
+        self.spCard = {1: "ace", 2: "jack", 3: "queen", 4: "king"} # this dictionary contains all types of cards that do not begin with a number
+        self.suit = {1: "clubs", 2: "spades", 3: "hearts", 4: "diamonds"} # a dictionary that stores all possible suits of cards
+        # declares a list called deck that holds every type of card
+        self.deck = ['ace of clubs', 'ace of spades', 'ace of hearts', 'ace of diamonds', '2 of clubs', '2 of spades', '2 of hearts', '2 of diamonds', '3 of clubs', '3 of spades', '3 of hearts', '3 of diamonds', '4 of clubs', '4 of spades', '4 of hearts', '4 of diamonds', '5 of clubs', '5 of spades', '5 of hearts', '5 of diamonds', '6 of clubs', '6 of spades', '6 of hearts', '6 of diamonds', '7 of clubs', '7 of spades', '7 of hearts', '7 of diamonds', '8 of clubs', '8 of spades', '8 of hearts', '8 of diamonds', '9 of clubs', '9 of spades', '9 of hearts', '9 of diamonds', '10 of clubs', '10 of spades', '10 of hearts', '10 of diamonds', 'jack of clubs', 'jack of spades', 'jack of hearts', 'jack of diamonds', 'queen of clubs', 'queen of spades', 'queen of hearts', 'queen of diamonds', 'king of clubs', 'king of spades', 'king of hearts', 'king of diamonds']
 
     def count_suit(self, target):
         temp = 0 # this variable keeps count of every time a card of target suit is found
@@ -57,11 +47,15 @@ class GameDeck:
             temp.append(self.deck.pop()) # appends the specified amount(from card_count) to the temp list by popping them from the deck
         return temp # returns the temp list
 
-    def sort_deck(self):
+    def sort_cards(self):
         # wip not ready for use(will work if used however just not in it's final state)
         # possible solution is to get every suit into it's own list and sort them by their numbers and then rejoin them in a specific order
         # todo add a method to sort the cards by suit and number
         # todo allow add new methods of sorting from what we have learned so far and let the user choose between them
+        # Heap Sort, Binary Insertion Sort, Merge Sort and
+        # A sorting algorithm of your choice not taught in class, with average
+        # time complexity of at most O(n log n) all need to be implemented
+
         tempDeck = []
         for i in range(len(self.deck)):
             if self.deck[i].split(' ')[0] == "ace":
@@ -79,7 +73,6 @@ class GameDeck:
         self.deck = tempDeck
 
     def shuffle(self):
-        temp = ""
         for i in range(1000): # iterates the code 1000 times
             ind1, ind2 = randint(0,51), randint(0,51) # randomly generates two indexes that will be swapped later
             # below swaps the two random indexes of the deck variable
@@ -87,20 +80,19 @@ class GameDeck:
             self.deck[ind1] = self.deck[ind2]
             self.deck[ind2] = temp
 
-    def to_string(self):
+    def __str__(self): # this method overwrites the default __str__ method to instead return the string below
         return f"{self.deck}" # returns the deck as a string
 
 my_hand = GameDeck() # makes a new object of the GameDeck class
 
-# testing commit
-
 my_hand.count_suit("hearts")
+print(my_hand)
 my_hand.shuffle()
-print(my_hand.to_string())
+print(my_hand)
 tem = my_hand.deal_cards(5)
-print(my_hand.to_string())
+print(my_hand)
 print(tem)
 my_hand.rejoin(tem)
-print(my_hand.to_string())
-my_hand.sort_deck()
-print(my_hand.to_string())
+print(my_hand)
+my_hand.sort_cards()
+print(my_hand)
