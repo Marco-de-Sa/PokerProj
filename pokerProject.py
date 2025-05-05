@@ -62,7 +62,7 @@ class GameDeck:
         # time complexity of at most O(n log n) all need to be implemented
 
         # beware code here is WIP and not ready for use
-
+        
         tempDeck = self.deck.copy() # makes a copy of the deck to sort
         if optional != None:
             tempDeck = optional
@@ -76,6 +76,23 @@ class GameDeck:
             if tempDeck[i].split(" ")[0] == "king":
                 tempDeck[i] = f"13 {tempDeck[i][1:]}" # replaces the king with a 13 to make sorting easier
             
+
+        sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
+        
+        if sortingType == "heapsort":
+            # heapsort code here
+            pass
+        elif sortingType == "binary insertion":
+            # binary insertion code here
+            pass
+        elif sortingType == "merge sort":
+            # merge sort code here
+            pass
+        elif sortingType == "quick sort":
+            # quick sort code here
+            pass
+        else:
+            print("Invalid sorting type, please try again")
 
     def shuffle(self):
         # shuffles the deck of cards
