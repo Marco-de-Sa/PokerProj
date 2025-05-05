@@ -52,8 +52,7 @@ class GameDeck:
             temp.append(self.deck.pop()) # appends the specified amount(from card_count) to the temp list by popping them from the deck
         return temp # returns the temp list
 
-    def sort_cards(self):
-        # wip not ready for use(will work if used however just not in it's final state)
+    def sort_cards(self, optional):
         # possible solution is to get every suit into it's own list and sort them by their numbers and then rejoin them in a specific order
         # todo add a method to sort the cards by suit and number
         # todo add a way to switch between sorting the deck or sorting the hand of the player
@@ -62,21 +61,21 @@ class GameDeck:
         # A sorting algorithm of your choice not taught in class, with average
         # time complexity of at most O(n log n) all need to be implemented
 
-        tempDeck = []
+        # beware code here is WIP and not ready for use
+
+        tempDeck = self.deck.copy() # makes a copy of the deck to sort
+        if optional != None:
+            tempDeck = optional
         for i in range(len(self.deck)):
-            if self.deck[i].split(' ')[0] == "ace":
-                tempDeck.append(self.deck[i])
-
-        for i in range(2, 11): # to sort card numbers
-            for j in range(len(self.deck)):# to get iterate through the deck
-                if self.deck[j].split(' ')[0] == str(i):
-                    tempDeck.append(self.deck[j])
-
-        for i in range(2, 5):
-            for j in range(len(self.deck)):
-                if self.deck[j].split(' ')[0] == self.spCard[i]:
-                    tempDeck.append(self.deck[j])
-        self.deck = tempDeck
+            if tempDeck[i].split(" ")[0] == "ace":
+                tempDeck[i] = f"1 {tempDeck[i][1:]}" # replaces the ace with a 1 to make sorting easier
+            if tempDeck[i].split(" ")[0] == "jack":
+                tempDeck[i] = f"11 {tempDeck[i][1:]}" # replaces the jack with a 11 to make sorting easier
+            if tempDeck[i].split(" ")[0] == "queen":
+                tempDeck[i] = f"12 {tempDeck[i][1:]}" # replaces the queen with a 12 to make sorting easier
+            if tempDeck[i].split(" ")[0] == "king":
+                tempDeck[i] = f"13 {tempDeck[i][1:]}" # replaces the king with a 13 to make sorting easier
+            
 
     def shuffle(self):
         # shuffles the deck of cards
@@ -102,5 +101,5 @@ print(my_hand)
 print(tem)
 my_hand.rejoin(tem)
 print(my_hand)
-my_hand.sort_cards()
+# my_hand.sort_cards() this code is not ready for use yet do not use
 print(my_hand)
