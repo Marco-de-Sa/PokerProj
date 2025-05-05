@@ -55,8 +55,7 @@ class GameDeck:
     def sort_cards(self, optional):
         # possible solution is to get every suit into it's own list and sort them by their numbers and then rejoin them in a specific order
         # todo add a method to sort the cards by suit and number
-        # todo add a way to switch between sorting the deck or sorting the hand of the player
-        # todo allow add new methods of sorting from what we have learned so far and let the user choose between them
+        # todo allow add code for the different sorting methods
         # Heap Sort, Binary Insertion Sort, Merge Sort and
         # A sorting algorithm of your choice not taught in class, with average
         # time complexity of at most O(n log n) all need to be implemented
@@ -66,7 +65,7 @@ class GameDeck:
         tempDeck = self.deck.copy() # makes a copy of the deck to sort
         if optional != None:
             tempDeck = optional
-        for i in range(len(self.deck)):
+        for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[0] == "ace":
                 tempDeck[i] = f"1 {tempDeck[i][1:]}" # replaces the ace with a 1 to make sorting easier
             if tempDeck[i].split(" ")[0] == "jack":
@@ -75,6 +74,16 @@ class GameDeck:
                 tempDeck[i] = f"12 {tempDeck[i][1:]}" # replaces the queen with a 12 to make sorting easier
             if tempDeck[i].split(" ")[0] == "king":
                 tempDeck[i] = f"13 {tempDeck[i][1:]}" # replaces the king with a 13 to make sorting easier
+        
+        for i in range(len(tempDeck)):
+            if tempDeck[i].split(" ")[2] == "spades":
+                tempDeck[i] = f"{tempDeck[i][:1]} 1"
+            if tempDeck[i].split(" ")[2] == "hearts":
+                tempDeck[i] = f"{tempDeck[i][:1]} 2"
+            if tempDeck[i].split(" ")[2] == "clubs":
+                tempDeck[i] = f"{tempDeck[i][:1]} 3"
+            if tempDeck[i].split(" ")[2] == "diamonds":
+                tempDeck[i] = f"{tempDeck[i][:1]} 4"
             
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
