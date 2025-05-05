@@ -56,6 +56,7 @@ class GameDeck:
         # wip not ready for use(will work if used however just not in it's final state)
         # possible solution is to get every suit into it's own list and sort them by their numbers and then rejoin them in a specific order
         # todo add a method to sort the cards by suit and number
+        # todo add a way to switch between sorting the deck or sorting the hand of the player
         # todo allow add new methods of sorting from what we have learned so far and let the user choose between them
         # Heap Sort, Binary Insertion Sort, Merge Sort and
         # A sorting algorithm of your choice not taught in class, with average
