@@ -63,32 +63,32 @@ class GameDeck:
 
         # beware code here is WIP and not ready for use
         
-        tempDeck = self.deck.copy() # makes a copy of the deck to sort
+        tempDeck = self.deck # makes a copy of the deck to sort
         if optional != None:
-            tempDeck = optional.copy() # makes a copy of the optional list to sort
+            tempDeck = optional # makes a copy of the optional list to sort
         # this code below is used to replace the face cards with numbers to make sorting easier
         # 1 = ace, 11 = jack, 12 = queen, 13 = king
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[0] == "ace":
-                tempDeck[i] = f"1 {tempDeck[i][1:]}" # replaces the ace with a 1 to make sorting easier
+                tempDeck[i] = f"1 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}" 
             if tempDeck[i].split(" ")[0] == "jack":
-                tempDeck[i] = f"11 {tempDeck[i][1:]}" # replaces the jack with a 11 to make sorting easier
+                tempDeck[i] = f"11 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}"
             if tempDeck[i].split(" ")[0] == "queen":
-                tempDeck[i] = f"12 {tempDeck[i][1:]}" # replaces the queen with a 12 to make sorting easier
+                tempDeck[i] = f"12 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}"
             if tempDeck[i].split(" ")[0] == "king":
-                tempDeck[i] = f"13 {tempDeck[i][1:]}" # replaces the king with a 13 to make sorting easier
+                tempDeck[i] = f"13 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}"
         
         # this code below is used to replace the suits with numbers to make sorting easier
         # 1 = spades, 2 = hearts, 3 = clubs, 4 = diamonds
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[2] == "spades":
-                tempDeck[i] = f"{tempDeck[i][:1]} 1"
+                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 1"
             if tempDeck[i].split(" ")[2] == "hearts":
-                tempDeck[i] = f"{tempDeck[i][:1]} 2"
+                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 2"
             if tempDeck[i].split(" ")[2] == "clubs":
-                tempDeck[i] = f"{tempDeck[i][:1]} 3"
+                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 3"
             if tempDeck[i].split(" ")[2] == "diamonds":
-                tempDeck[i] = f"{tempDeck[i][:1]} 4"
+                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 4"
         print(tempDeck[0].split(" ")[2])
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
