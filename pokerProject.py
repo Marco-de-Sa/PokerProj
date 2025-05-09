@@ -56,6 +56,7 @@ class GameDeck:
         # possible solution is to get every suit into it's own list and sort them by their numbers and then rejoin them in a specific order
         # todo add a method to sort the cards by suit and number
         # todo allow add code for the different sorting methods
+
         # Heap Sort, Binary Insertion Sort, Merge Sort and
         # A sorting algorithm of your choice not taught in class, with average
         # time complexity of at most O(n log n) all need to be implemented
@@ -64,7 +65,9 @@ class GameDeck:
         
         tempDeck = self.deck.copy() # makes a copy of the deck to sort
         if optional != None:
-            tempDeck = optional
+            tempDeck = optional.copy() # makes a copy of the optional list to sort
+        # this code below is used to replace the face cards with numbers to make sorting easier
+        # 1 = ace, 11 = jack, 12 = queen, 13 = king
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[0] == "ace":
                 tempDeck[i] = f"1 {tempDeck[i][1:]}" # replaces the ace with a 1 to make sorting easier
@@ -75,6 +78,8 @@ class GameDeck:
             if tempDeck[i].split(" ")[0] == "king":
                 tempDeck[i] = f"13 {tempDeck[i][1:]}" # replaces the king with a 13 to make sorting easier
         
+        # this code below is used to replace the suits with numbers to make sorting easier
+        # 1 = spades, 2 = hearts, 3 = clubs, 4 = diamonds
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[2] == "spades":
                 tempDeck[i] = f"{tempDeck[i][:1]} 1"
@@ -84,7 +89,7 @@ class GameDeck:
                 tempDeck[i] = f"{tempDeck[i][:1]} 3"
             if tempDeck[i].split(" ")[2] == "diamonds":
                 tempDeck[i] = f"{tempDeck[i][:1]} 4"
-            
+        print(tempDeck[0].split(" ")[2])
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
         
@@ -118,14 +123,14 @@ class GameDeck:
 
 my_hand = GameDeck() # makes a new object of the GameDeck class
 
-my_hand.count_suit("hearts")
-print(my_hand)
-my_hand.shuffle()
-print(my_hand)
-tem = my_hand.deal_cards(5)
-print(my_hand)
-print(tem)
-my_hand.rejoin(tem)
-print(my_hand)
-# my_hand.sort_cards() this code is not ready for use yet do not use
+# my_hand.count_suit("hearts")
+# print(my_hand)
+# my_hand.shuffle()
+# print(my_hand)
+# tem = my_hand.deal_cards(5)
+# print(my_hand)
+# print(tem)
+# my_hand.rejoin(tem)
+# print(my_hand)
+my_hand.sort_cards(None)
 print(my_hand)
