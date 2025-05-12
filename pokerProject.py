@@ -78,10 +78,12 @@ class GameDeck:
             if tempDeck[i].split(" ")[0] == "king":
                 tempDeck[i] = f"13 {tempDeck[i].split(' ')[1]} {tempDeck[i].split(' ')[2]}"
         
-        # this code below is used to replace the suits with numbers to make sorting easier
-        # 1 = spades, 2 = hearts, 3 = clubs, 4 = diamonds
+        heart, diamond, club, spade = [], [], [], [] # creates 4 empty lists to hold the cards of each suit
+
+        # this code below is used to sort the cards into their respective suits
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[2] == "spades":
+<<<<<<< HEAD
                 tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 1"
             if tempDeck[i].split(" ")[2] == "hearts":
                 tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 2"
@@ -89,16 +91,39 @@ class GameDeck:
                 tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 3"
             if tempDeck[i].split(" ")[2] == "diamonds":
                 tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 4"
+=======
+                spade.append(tempDeck[i])
+            if tempDeck[i].split(" ")[2] == "hearts":
+                heart.append(tempDeck[i])
+            if tempDeck[i].split(" ")[2] == "clubs":
+                club.append(tempDeck[i])
+            if tempDeck[i].split(" ")[2] == "diamonds":
+                diamond.append(tempDeck[i])
+>>>>>>> 31049fb2477c0cb6f24e99f7b385833c10015961
         print(tempDeck[0].split(" ")[2])
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
         
+        deck = [spade, heart, club, diamond] # creates an empty list to hold the sorted cards
+
         if sortingType == "heapsort":
             # heapsort code here
             pass
         elif sortingType == "binary insertion":
-            # binary insertion code here
-            pass
+            def insertion_sort(arr):
+                for i in range(1, len(arr)):
+                    for j in range(i):
+                        if arr[i].split(' ')[0] < arr[j].split(' ')[0]:
+                            temp = arr[i]
+                            arr[i] = arr[j]
+                            arr[j] = temp
+                            continue
+                return arr
+            for i in range(len(deck)):
+                insertion_sort(deck[i])
+            for i in deck:
+                for j in i:
+                    tempDeck.append(j)
         elif sortingType == "merge sort":
             # merge sort code here
             pass
