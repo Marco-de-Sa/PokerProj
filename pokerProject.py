@@ -139,6 +139,87 @@ class GameDeck:
     def __str__(self): # this method overwrites the default __str__ method to instead return the string below
         return f"{self.deck}" # returns the deck as a string
 
+class HandAssignment:
+    # Hand detection
+    def hand_detection(self, hand):
+        # Extract the rank value of a card (e.g., 'king' => 13, '5' => 5)
+        def rank_value(card):
+                face = card.split()[0]
+                face_cards = {"ace": 14, "jack": 11, "queen": 12, "king": 13}
+                if face in face_cards:
+                    return face_cards[face]
+                elif face.isdigit():
+                    return int(face)
+                else:
+                    print(f"Unrecognized card face: {face}")
+
+       # Extract the suit of a card (e.g., 'hearts', 'clubs') 
+        def suit(card):
+            return card.split()[-1]
+        
+        # Count how many times each rank appears in the hand
+        def count_ranks(cards):
+            counts = {}
+            for card in cards:
+                val = rank_value(card)
+                counts[val] = counts.get(val, 0) + 1
+            return counts
+        
+        # Check if all cards are of the same suit
+        def check_flush(cards):
+            suits = [suit(card) for card in cards]
+            return len(set(suits)) == 1
+        
+         # Check if the hand is a straight (consecutive values)
+        def check_straight(cards):
+            values = sorted([rank_value(card) for card in cards])
+            if len(values) < 5:
+                return False
+            elif values == [2, 3, 4, 5, 14]:
+                return True
+            return all(values[i] - values[i-1] == 1 for i in range(1,5))
+        
+        # Determine the poker hand category
+        def hand_assignment(cards):
+            counts = count_ranks(cards)
+            freq = sorted(counts.values(), reverse=True)
+            is_flush = check_flush(cards)
+            is_straight = check_straight(cards)
+            values = sorted([rank_value(card) for card in cards])
+
+            if is_flush and values == [10, 11, 12, 13, 14]:
+                return "Royal Flush"
+            
+            if is_flush and is_straight:
+                return "Straight Flush"
+            
+            if freq == [4, 1]:
+                return "Four of a Kind"
+            
+            if freq == [3, 2]:
+                return "Full House"
+            
+            if is_flush:
+                return "Flush"
+
+            if is_straight:
+                return "Straight"
+            
+            if freq == [3, 1, 1]:
+                return "Three of a Kind"
+            
+            if freq == [2, 2, 1]:
+                return "Two Pair"
+
+            if freq == [2, 1, 1, 1]:
+                return "One Pair"
+            
+            else:
+                return "No valid poker hand has been given"
+            
+        result = hand_assignment(hand)
+        print(f"Detected hand: {result}")
+
 my_hand = GameDeck() # makes a new object of the GameDeck class
 
 # my_hand.count_suit("hearts")
@@ -152,3 +233,8 @@ my_hand = GameDeck() # makes a new object of the GameDeck class
 # print(my_hand)
 my_hand.sort_cards(None)
 print(my_hand)
+
+
+hand = my_hand.deal_cards(5)
+print("Dealt hand:", hand)
+HandAssignment.hand_detection(hand)
