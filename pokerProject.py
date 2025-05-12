@@ -83,15 +83,6 @@ class GameDeck:
         # this code below is used to sort the cards into their respective suits
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[2] == "spades":
-<<<<<<< HEAD
-                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 1"
-            if tempDeck[i].split(" ")[2] == "hearts":
-                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 2"
-            if tempDeck[i].split(" ")[2] == "clubs":
-                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 3"
-            if tempDeck[i].split(" ")[2] == "diamonds":
-                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 4"
-=======
                 spade.append(tempDeck[i])
             if tempDeck[i].split(" ")[2] == "hearts":
                 heart.append(tempDeck[i])
@@ -99,7 +90,6 @@ class GameDeck:
                 club.append(tempDeck[i])
             if tempDeck[i].split(" ")[2] == "diamonds":
                 diamond.append(tempDeck[i])
->>>>>>> 31049fb2477c0cb6f24e99f7b385833c10015961
         print(tempDeck[0].split(" ")[2])
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
