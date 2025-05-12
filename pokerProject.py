@@ -111,7 +111,9 @@ class GameDeck:
                 return arr
             for i in range(len(deck)):
                 insertion_sort(deck[i])
-            
+            for i in deck:
+                for j in i:
+                    tempDeck.append(j)
         elif sortingType == "merge sort":
             # merge sort code here
             pass
@@ -167,7 +169,7 @@ class HandAssignment:
         
          # Check if the hand is a straight (consecutive values)
         def check_straight(cards):
-            values = sorted([rank_value(card) for card in self.hand])
+            values = sorted([rank_value(card) for card in cards])
             if len(values) < 5:
                 return False
             elif values == [2, 3, 4, 5, 14]:
