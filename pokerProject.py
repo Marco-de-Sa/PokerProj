@@ -94,28 +94,24 @@ class GameDeck:
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
         
-        deck = [spade, hear] # creates an empty list to hold the sorted cards
+        deck = [spade, heart, club, diamond] # creates an empty list to hold the sorted cards
 
         if sortingType == "heapsort":
             # heapsort code here
             pass
         elif sortingType == "binary insertion":
             def insertion_sort(arr):
-                cc = 0
-                cs = 0
                 for i in range(1, len(arr)):
                     for j in range(i):
-                        if arr[i] < arr[j]:
+                        if arr[i].split(' ')[0] < arr[j].split(' ')[0]:
                             temp = arr[i]
                             arr[i] = arr[j]
                             arr[j] = temp
-                            cs += 1
                             continue
-                        cc += 1
-                return arr, cc, cs
-            arr, cc, cs = insertion_sort(tempDeck)
-            # binary insertion code here
-            pass
+                return arr
+            for i in range(len(deck)):
+                insertion_sort(deck[i])
+            
         elif sortingType == "merge sort":
             # merge sort code here
             pass
@@ -171,7 +167,7 @@ class HandAssignment:
         
          # Check if the hand is a straight (consecutive values)
         def check_straight(cards):
-            values = sorted([rank_value(card) for card in cards])
+            values = sorted([rank_value(card) for card in self.hand])
             if len(values) < 5:
                 return False
             elif values == [2, 3, 4, 5, 14]:
