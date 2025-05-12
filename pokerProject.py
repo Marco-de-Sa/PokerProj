@@ -80,8 +80,7 @@ class GameDeck:
         
         heart, diamond, club, spade = [], [], [], [] # creates 4 empty lists to hold the cards of each suit
 
-        # this code below is used to replace the suits with numbers to make sorting easier
-        # 1 = spades, 2 = hearts, 3 = clubs, 4 = diamonds
+        # this code below is used to sort the cards into their respective suits
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[2] == "spades":
                 spade.append(tempDeck[i])
@@ -95,7 +94,7 @@ class GameDeck:
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
         
-        deck = [spade, ] # creates an empty list to hold the sorted cards
+        deck = [spade, hear] # creates an empty list to hold the sorted cards
 
         if sortingType == "heapsort":
             # heapsort code here
