@@ -121,6 +121,7 @@ class GameDeck:
     def __str__(self): # this method overwrites the default __str__ method to instead return the string below
         return f"{self.deck}" # returns the deck as a string
 
+class HandAssignment:
     # Hand detection
     def hand_detection(self, hand):
         # Extract the rank value of a card (e.g., 'king' => 13, '5' => 5)
@@ -218,4 +219,4 @@ print(my_hand)
 
 hand = my_hand.deal_cards(5)
 print("Dealt hand:", hand)
-my_hand.hand_detection(hand)
+HandAssignment.hand_detection(hand)
