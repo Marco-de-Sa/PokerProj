@@ -25,8 +25,8 @@ class GameDeck:
 
     """
     def __init__(self):
-        self.spCard = {1: "ace", 2: "jack", 3: "queen", 4: "king"} # this dictionary contains all types of cards that do not begin with a number
-        self.suit = {1: "clubs", 2: "spades", 3: "hearts", 4: "diamonds"} # a dictionary that stores all possible suits of cards
+        self.spCard = ["ace", "jack", "queen", "king"] # this dictionary contains all types of cards that do not begin with a number
+        self.suit = ["clubs", "spades", "hearts", "diamonds"] # a dictionary that stores all possible suits of cards
         # declares a list called deck that holds every type of card
         self.deck = ['ace of clubs', 'ace of spades', 'ace of hearts', 'ace of diamonds', '2 of clubs', '2 of spades', '2 of hearts', '2 of diamonds', '3 of clubs', '3 of spades', '3 of hearts', '3 of diamonds', '4 of clubs', '4 of spades', '4 of hearts', '4 of diamonds', '5 of clubs', '5 of spades', '5 of hearts', '5 of diamonds', '6 of clubs', '6 of spades', '6 of hearts', '6 of diamonds', '7 of clubs', '7 of spades', '7 of hearts', '7 of diamonds', '8 of clubs', '8 of spades', '8 of hearts', '8 of diamonds', '9 of clubs', '9 of spades', '9 of hearts', '9 of diamonds', '10 of clubs', '10 of spades', '10 of hearts', '10 of diamonds', 'jack of clubs', 'jack of spades', 'jack of hearts', 'jack of diamonds', 'queen of clubs', 'queen of spades', 'queen of hearts', 'queen of diamonds', 'king of clubs', 'king of spades', 'king of hearts', 'king of diamonds']
 
@@ -116,6 +116,86 @@ class GameDeck:
     def __str__(self): # this method overwrites the default __str__ method to instead return the string below
         return f"{self.deck}" # returns the deck as a string
 
+    # Hand detection
+    def hand_detection(self, hand):
+        # Extract the rank value of a card (e.g., 'king' => 13, '5' => 5)
+        def rank_value(card):
+                face = card.split()[0]
+                face_cards = {"ace": 14, "jack": 11, "queen": 12, "king": 13}
+                if face in face_cards:
+                    return face_cards[face]
+                elif face.isdigit():
+                    return int(face)
+                else:
+                    print(f"Unrecognized card face: {face}")
+
+       # Extract the suit of a card (e.g., 'hearts', 'clubs') 
+        def suit(card):
+            return card.split()[-1]
+        
+        # Count how many times each rank appears in the hand
+        def count_ranks(cards):
+            counts = {}
+            for card in cards:
+                val = rank_value(card)
+                counts[val] = counts.get(val, 0) + 1
+            return counts
+        
+        # Check if all cards are of the same suit
+        def check_flush(cards):
+            suits = [suit(card) for card in cards]
+            return len(set(suits)) == 1
+        
+         # Check if the hand is a straight (consecutive values)
+        def check_straight(cards):
+            values = sorted([rank_value(card) for card in cards])
+            if len(values) < 5:
+                return False
+            elif values == [2, 3, 4, 5, 14]:
+                return True
+            return all(values[i] - values[i-1] == 1 for i in range(1,5))
+        
+        # Determine the poker hand category
+        def hand_assignment(cards):
+            counts = count_ranks(cards)
+            freq = sorted(counts.values(), reverse=True)
+            is_flush = check_flush(cards)
+            is_straight = check_straight(cards)
+            values = sorted([rank_value(card) for card in cards])
+
+            if is_flush and values == [10, 11, 12, 13, 14]:
+                return "Royal Flush"
+            
+            if is_flush and is_straight:
+                return "Straight Flush"
+            
+            if freq == [4, 1]:
+                return "Four of a Kind"
+            
+            if freq == [3, 2]:
+                return "Full House"
+            
+            if is_flush:
+                return "Flush"
+
+            if is_straight:
+                return "Straight"
+            
+            if freq == [3, 1, 1]:
+                return "Three of a Kind"
+            
+            if freq == [2, 2, 1]:
+                return "Two Pair"
+
+            if freq == [2, 1, 1, 1]:
+                return "One Pair"
+            
+            else:
+                return "No valid poker hand has been given"
+            
+        result = hand_assignment(hand)
+        print(f"Detected hand: {result}")
+
 my_hand = GameDeck() # makes a new object of the GameDeck class
 
 my_hand.count_suit("hearts")
@@ -129,3 +209,8 @@ my_hand.rejoin(tem)
 print(my_hand)
 # my_hand.sort_cards() this code is not ready for use yet do not use
 print(my_hand)
+
+
+hand = my_hand.deal_cards(5)
+print("Dealt hand:", hand)
+my_hand.hand_detection(hand)
