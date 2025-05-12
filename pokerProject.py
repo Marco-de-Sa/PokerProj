@@ -78,25 +78,43 @@ class GameDeck:
             if tempDeck[i].split(" ")[0] == "king":
                 tempDeck[i] = f"13 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}"
         
+        heart, diamond, club, spade = [], [], [], [] # creates 4 empty lists to hold the cards of each suit
+
         # this code below is used to replace the suits with numbers to make sorting easier
         # 1 = spades, 2 = hearts, 3 = clubs, 4 = diamonds
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[2] == "spades":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 1"
+                spade.append(tempDeck[i])
             if tempDeck[i].split(" ")[2] == "hearts":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 2"
+                heart.append(tempDeck[i])
             if tempDeck[i].split(" ")[2] == "clubs":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 3"
+                club.append(tempDeck[i])
             if tempDeck[i].split(" ")[2] == "diamonds":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 4"
+                diamond.append(tempDeck[i])
         print(tempDeck[0].split(" ")[2])
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
         
+        deck = [spade, ] # creates an empty list to hold the sorted cards
+
         if sortingType == "heapsort":
             # heapsort code here
             pass
         elif sortingType == "binary insertion":
+            def insertion_sort(arr):
+                cc = 0
+                cs = 0
+                for i in range(1, len(arr)):
+                    for j in range(i):
+                        if arr[i] < arr[j]:
+                            temp = arr[i]
+                            arr[i] = arr[j]
+                            arr[j] = temp
+                            cs += 1
+                            continue
+                        cc += 1
+                return arr, cc, cs
+            arr, cc, cs = insertion_sort(tempDeck)
             # binary insertion code here
             pass
         elif sortingType == "merge sort":
