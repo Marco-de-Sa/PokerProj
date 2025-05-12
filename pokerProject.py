@@ -70,25 +70,25 @@ class GameDeck:
         # 1 = ace, 11 = jack, 12 = queen, 13 = king
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[0] == "ace":
-                tempDeck[i] = f"1 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}" 
+                tempDeck[i] = f"1 {tempDeck[i].split(' ')[1]} {tempDeck[i].split(' ')[2]}" 
             if tempDeck[i].split(" ")[0] == "jack":
-                tempDeck[i] = f"11 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}"
+                tempDeck[i] = f"11 {tempDeck[i].split(' ')[1]} {tempDeck[i].split(' ')[2]}"
             if tempDeck[i].split(" ")[0] == "queen":
-                tempDeck[i] = f"12 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}"
+                tempDeck[i] = f"12 {tempDeck[i].split(' ')[1]} {tempDeck[i].split(' ')[2]}"
             if tempDeck[i].split(" ")[0] == "king":
-                tempDeck[i] = f"13 {tempDeck[i].split(" ")[1]} {tempDeck[i].split(" ")[2]}"
+                tempDeck[i] = f"13 {tempDeck[i].split(' ')[1]} {tempDeck[i].split(' ')[2]}"
         
         # this code below is used to replace the suits with numbers to make sorting easier
         # 1 = spades, 2 = hearts, 3 = clubs, 4 = diamonds
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[2] == "spades":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 1"
+                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 1"
             if tempDeck[i].split(" ")[2] == "hearts":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 2"
+                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 2"
             if tempDeck[i].split(" ")[2] == "clubs":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 3"
+                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 3"
             if tempDeck[i].split(" ")[2] == "diamonds":
-                tempDeck[i] = f"{tempDeck[i].split(" ")[0]} {tempDeck[i].split(" ")[1]} 4"
+                tempDeck[i] = f"{tempDeck[i].split(' ')[0]} {tempDeck[i].split(' ')[1]} 4"
         print(tempDeck[0].split(" ")[2])
 
         sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
@@ -122,6 +122,23 @@ class GameDeck:
         return f"{self.deck}" # returns the deck as a string
 
 class HandAssignment:
+    """
+    This is the class that handles all operations that related to assigning a hand type to the hand dealt to the user.
+    A brief description of the methods:
+
+    __init__: Initializes the HandAssignment class and sets up the hand attribute.
+    hand_detection: Detects and assigns the poker hand type for a given hand of cards.
+        - rank_value: Extracts the rank value of a card (e.g., 'king' => 13, '5' => 5).
+        - suit: Extracts the suit of a card (e.g., 'hearts', 'clubs').
+        - count_ranks: Counts how many times each rank appears in the hand.
+        - check_flush: Checks if all cards are of the same suit.
+        - check_straight: Checks if the hand is a straight (consecutive values).
+        - hand_assignment: Determines the poker hand category based on the hand.
+    """
+
+    def __init__(self):
+        self.hand = hand
+    
     # Hand detection
     def hand_detection(self, hand):
         # Extract the rank value of a card (e.g., 'king' => 13, '5' => 5)
@@ -142,19 +159,19 @@ class HandAssignment:
         # Count how many times each rank appears in the hand
         def count_ranks(cards):
             counts = {}
-            for card in cards:
+            for card in self.hand:
                 val = rank_value(card)
                 counts[val] = counts.get(val, 0) + 1
             return counts
         
         # Check if all cards are of the same suit
         def check_flush(cards):
-            suits = [suit(card) for card in cards]
+            suits = [suit(card) for card in self.hand]
             return len(set(suits)) == 1
         
          # Check if the hand is a straight (consecutive values)
         def check_straight(cards):
-            values = sorted([rank_value(card) for card in cards])
+            values = sorted([rank_value(card) for card in self.hand])
             if len(values) < 5:
                 return False
             elif values == [2, 3, 4, 5, 14]:
@@ -164,10 +181,10 @@ class HandAssignment:
         # Determine the poker hand category
         def hand_assignment(cards):
             counts = count_ranks(cards)
-            freq = sorted(counts.values(), reverse=True)
+            freq = sorted(counts.values(), reverse=True) #remember to ask mistah agusto about sort
             is_flush = check_flush(cards)
             is_straight = check_straight(cards)
-            values = sorted([rank_value(card) for card in cards])
+            values = sorted([rank_value(card) for card in self.hand])
 
             if is_flush and values == [10, 11, 12, 13, 14]:
                 return "Royal Flush"
@@ -199,7 +216,7 @@ class HandAssignment:
             else:
                 return "No valid poker hand has been given"
             
-        result = hand_assignment(hand)
+        result = hand_assignment(self.hand)
         print(f"Detected hand: {result}")
 
 my_hand = GameDeck() # makes a new object of the GameDeck class
