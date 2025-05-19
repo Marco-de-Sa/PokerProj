@@ -17,11 +17,9 @@ class GameDeck:
     deal_cards: deals out the specified number of cards in list form
     sort_deck: is at the moment non-functional, but it is planned to have a way for the player to
             select what sorting method will be used
-    shuffle: self-explanatory, it will shuffle the cards remaining in the deck by switching 2
-            random indexes 1000 times
-    to_string: I am not sure if this name is in line with python naming practices with this sort
-            of method, but basically it takes the deck of cards(list) and transforms it into a string
-            which is returned
+    shuffle: shuffles the deck of cards using the fisher yates method
+    __str__: this method overwrites the default __str__ method to instead return the string below
+            this is used to print out the deck of cards in a string format
 
     """
     def __init__(self):
@@ -54,8 +52,6 @@ class GameDeck:
 
     def sort_cards(self, optional):
         # possible solution is to get every suit into it's own list and sort them by their numbers and then rejoin them in a specific order
-        # todo add a method to sort the cards by suit and number
-        # todo allow add code for the different sorting methods
 
         # Heap Sort, Binary Insertion Sort, Merge Sort and
         # A sorting algorithm of your choice not taught in class, with average
@@ -63,7 +59,7 @@ class GameDeck:
 
         # beware code here is WIP and not ready for use
         
-        tempDeck = self.deck # makes a copy of the deck to sort
+        tempDeck = self.deck.copy # makes a copy of the deck to sort
         if optional != None:
             tempDeck = optional # makes a copy of the optional list to sort
         # this code below is used to replace the face cards with numbers to make sorting easier
@@ -90,11 +86,8 @@ class GameDeck:
                 club.append(tempDeck[i])
             if tempDeck[i].split(" ")[2] == "diamonds":
                 diamond.append(tempDeck[i])
-        print(tempDeck[0].split(" ")[2])
-
-        sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
         
-        deck = [spade, heart, club, diamond] # creates an empty list to hold the sorted cards
+        sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
 
         if sortingType == "heapsort":
             # heapsort code here
@@ -107,13 +100,12 @@ class GameDeck:
                             temp = arr[i]
                             arr[i] = arr[j]
                             arr[j] = temp
-                            continue
                 return arr
-            for i in range(len(deck)):
-                insertion_sort(deck[i])
-            for i in deck:
-                for j in i:
-                    tempDeck.append(j)
+            spade = insertion_sort(spade)
+            heart = insertion_sort(heart)
+            club = insertion_sort(club)
+            diamond = insertion_sort(diamond)
+
         elif sortingType == "merge sort":
             # merge sort code here
             pass
@@ -122,6 +114,17 @@ class GameDeck:
             pass
         else:
             print("Invalid sorting type, please try again")
+        
+        for i in spade:
+            tempDeck.append(i)
+        for i in heart:
+            tempDeck.append(i)
+        for i in club:
+            tempDeck.append(i)
+        for i in diamond:
+            tempDeck.append(i)
+        
+        print("Sorted deck:", tempDeck) # prints the sorted deck
 
     def shuffle(self):
         # shuffles the deck of cards
