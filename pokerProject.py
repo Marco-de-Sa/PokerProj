@@ -120,7 +120,7 @@ class GameDeck:
         
         def redoCards(temp): # replaces the numbers back to their face values
             # 1 = ace, 11 = jack, 12 = queen, 13 = king
-            for i in range(len(tempDeck)):
+            for i in range(len(temp)):
                 if temp[i].split(" ")[0] == "1":
                     temp[i] = f"ace {temp[i].split(' ')[1]} {temp[i].split(' ')[2]}" 
                 if temp[i].split(" ")[0] == "11":
@@ -275,7 +275,7 @@ my_hand.shuffle()
 # my_hand.rejoin(tem)
 print(my_hand)
 print()
-my_hand.set_deck(my_hand.sort_cards(None))
+print(my_hand.sort_cards(None))
 print(my_hand)
 
 
