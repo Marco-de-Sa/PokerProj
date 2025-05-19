@@ -58,11 +58,12 @@ class GameDeck:
         # time complexity of at most O(n log n) all need to be implemented
 
         # beware code here is WIP and not ready for use
-        
-        tempDeck = self.deck.copy # makes a copy of the deck to sort
-        if optional != None:
+        tempDeck = [] # creates a temporary list
+        if optional == list:
             tempDeck = optional # makes a copy of the optional list to sort
-        # this code below is used to replace the face cards with numbers to make sorting easier
+        else:
+            tempDeck = self.deck.copy() # makes a copy of the deck to sort
+        # the code below is used to replace the face cards with numbers to make sorting easier
         # 1 = ace, 11 = jack, 12 = queen, 13 = king
         for i in range(len(tempDeck)):
             if tempDeck[i].split(" ")[0] == "ace":
@@ -87,7 +88,7 @@ class GameDeck:
             if tempDeck[i].split(" ")[2] == "diamonds":
                 diamond.append(tempDeck[i])
         
-        sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort)")
+        sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort): ")
 
         if sortingType == "heapsort":
             # heapsort code here
@@ -96,11 +97,13 @@ class GameDeck:
             def insertion_sort(arr):
                 for i in range(1, len(arr)):
                     for j in range(i):
-                        if arr[i].split(' ')[0] < arr[j].split(' ')[0]:
+                        if int(arr[i].split(' ')[0]) < int(arr[j].split(' ')[0]):
                             temp = arr[i]
                             arr[i] = arr[j]
                             arr[j] = temp
                 return arr
+            
+            # parses each card list into the insertion sort function
             spade = insertion_sort(spade)
             heart = insertion_sort(heart)
             club = insertion_sort(club)
@@ -115,6 +118,25 @@ class GameDeck:
         else:
             print("Invalid sorting type, please try again")
         
+        def redoCards(temp): # replaces the numbers back to their face values
+            # 1 = ace, 11 = jack, 12 = queen, 13 = king
+            for i in range(len(tempDeck)):
+                if temp[i].split(" ")[0] == "1":
+                    temp[i] = f"ace {temp[i].split(' ')[1]} {temp[i].split(' ')[2]}" 
+                if temp[i].split(" ")[0] == "11":
+                    temp[i] = f"jack {temp[i].split(' ')[1]} {temp[i].split(' ')[2]}"
+                if temp[i].split(" ")[0] == "12":
+                    temp[i] = f"queen {temp[i].split(' ')[1]} {temp[i].split(' ')[2]}"
+                if temp[i].split(" ")[0] == "13":
+                    temp[i] = f"king {temp[i].split(' ')[1]} {temp[i].split(' ')[2]}"
+            return temp
+        
+        spade = redoCards(spade)
+        heart = redoCards(heart)
+        club = redoCards(club)
+        diamond = redoCards(diamond)
+
+        tempDeck = []
         for i in spade:
             tempDeck.append(i)
         for i in heart:
@@ -124,7 +146,11 @@ class GameDeck:
         for i in diamond:
             tempDeck.append(i)
         
-        print("Sorted deck:", tempDeck) # prints the sorted deck
+        return tempDeck # returns the sorted deck
+
+    def set_deck(self, newDeck):
+        # this method sets the deck to a new deck
+        self.deck = newDeck
 
     def shuffle(self):
         # shuffles the deck of cards
@@ -241,14 +267,15 @@ my_hand = GameDeck() # makes a new object of the GameDeck class
 
 # my_hand.count_suit("hearts")
 # print(my_hand)
-# my_hand.shuffle()
+my_hand.shuffle()
 # print(my_hand)
 # tem = my_hand.deal_cards(5)
 # print(my_hand)
 # print(tem)
 # my_hand.rejoin(tem)
-# print(my_hand)
-my_hand.sort_cards(None)
+print(my_hand)
+print()
+my_hand.set_deck(my_hand.sort_cards(None))
 print(my_hand)
 
 
