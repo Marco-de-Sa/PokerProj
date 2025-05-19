@@ -229,6 +229,9 @@ class HandAssignment:
     def __init__(self):
         self.hand = hand
     
+    def set_hand(self, cards):
+        self.hand = cards
+
     # Hand detection
     def hand_detection(self, hand):
         # Extract the rank value of a card (e.g., 'king' => 13, '5' => 5)
@@ -246,6 +249,8 @@ class HandAssignment:
         def suit(card):
             return card.split()[-1]
         
+        
+
         # Count how many times each rank appears in the hand
         def count_ranks(cards):
             counts = {}
@@ -310,6 +315,7 @@ class HandAssignment:
         print(f"Detected hand: {result}")
 
 my_hand = GameDeck() # makes a new object of the GameDeck class
+my_cards = HandAssignment() # makes a new object of the HandAssignment class
 
 # my_hand.count_suit("hearts")
 # print(my_hand)
@@ -326,6 +332,6 @@ my_hand.set_deck(tem)
 print(my_hand)
 
 
-# hand = my_hand.deal_cards(5)
-# print("Dealt hand:", hand)
-# HandAssignment.hand_detection(hand)
+hand = my_hand.deal_cards(5)
+print("Dealt hand:", hand)
+HandAssignment.hand_detection(hand)
