@@ -98,9 +98,7 @@ class GameDeck:
             def heapify(arr, n, i):
                 # Initialize largest as root
                 largest = i 
-                #  left index = 2*i + 1
                 l = 2 * i + 1 
-                # right index = 2*i + 2
                 r = 2 * i + 2  
                 # If left child is larger than root
                 if l < n and int(arr[l].split(" ")[0]) > int(arr[largest].split(" ")[0]):
@@ -150,8 +148,60 @@ class GameDeck:
             diamond = insertion_sort(diamond)
 
         elif sortingType == "merge sort":
-            # merge sort code here
-            pass
+            def merge(arr, left, mid, right):
+                n1 = mid - left + 1 # gets left half of the array
+                n2 = right - mid # gets right half of the array
+
+                # Create temp arrays
+                L = [0] * n1
+                R = [0] * n2
+
+                # copies subsections of the array into temp arrays
+                for i in range(n1):
+                    L[i] = arr[left + i]
+                for j in range(n2):
+                    R[j] = arr[mid + 1 + j]
+
+                i = 0  # starting index of first subarray
+                j = 0  # starting index of second subarray
+                k = left  # starting index of merged subarray
+
+                # Merge the temp arrays back into arr
+                while i < n1 and j < n2:
+                    if int(L[i].split(" ")[0]) <= int(R[j].split(" ")[0]):
+                        arr[k] = L[i]
+                        i += 1
+                    else:
+                        arr[k] = R[j]
+                        j += 1
+                    k += 1
+
+                # Copy the remaining elements of L
+                while i < n1:
+                    arr[k] = L[i]
+                    i += 1
+                    k += 1
+
+                # Copy the remaining elements of R
+                while j < n2:
+                    arr[k] = R[j]
+                    j += 1
+                    k += 1
+
+            def merge_sort(arr, left, right):
+                if left < right:
+                    mid = (left + right) // 2
+
+                    merge_sort(arr, left, mid)
+                    merge_sort(arr, mid + 1, right)
+                    merge(arr, left, mid, right)
+
+
+            merge_sort(heart, 0, len(heart) - 1)
+            merge_sort(spade, 0, len(spade) - 1)
+            merge_sort(club, 0, len(club) - 1)
+            merge_sort(diamond, 0, len(diamond) - 1)
+
         elif sortingType == "quick sort":
             # quick sort code here
             pass
@@ -315,7 +365,7 @@ class HandAssignment:
         print(f"Detected hand: {result}")
 
 my_hand = GameDeck() # makes a new object of the GameDeck class
-my_cards = HandAssignment() # makes a new object of the HandAssignment class
+# my_cards = HandAssignment() # makes a new object of the HandAssignment class
 
 # my_hand.count_suit("hearts")
 # print(my_hand)
@@ -332,6 +382,6 @@ my_hand.set_deck(tem)
 print(my_hand)
 
 
-hand = my_hand.deal_cards(5)
-print("Dealt hand:", hand)
-HandAssignment.hand_detection(hand)
+# hand = my_hand.deal_cards(5)
+# print("Dealt hand:", hand)
+# HandAssignment.hand_detection(hand)
