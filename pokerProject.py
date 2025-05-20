@@ -195,8 +195,7 @@ class GameDeck:
                     merge_sort(arr, left, mid)
                     merge_sort(arr, mid + 1, right)
                     merge(arr, left, mid, right)
-
-
+                    
             merge_sort(heart, 0, len(heart) - 1)
             merge_sort(spade, 0, len(spade) - 1)
             merge_sort(club, 0, len(club) - 1)
