@@ -96,6 +96,7 @@ class GameDeck:
 
         if sortingType == "heapsort":
             def heapify(arr, n, i):
+                """builds a heap from the given array"""
                 # Initialize largest as root
                 largest = i 
                 l = 2 * i + 1 
@@ -114,8 +115,9 @@ class GameDeck:
 
             # Main function to do heap sort
             def heapSort(arr):
+                """function to perform heap sort where arr is the list to be sorted"""
                 n = len(arr)
-                # Build heap (rearrange array)
+                # Build heap (rearranges the array into a heap)
                 for i in range(n // 2 - 1, -1, -1):
                     heapify(arr, n, i)
                     
@@ -257,7 +259,8 @@ class GameDeck:
 
 ###########################################################################################################
 
-    def __str__(self): # this method overwrites the default __str__ method to instead return the string below
+    def __str__(self):
+        """this method overwrites the default __str__ method to instead return the string below"""
         return f"{self.deck}" # returns the deck as a string
 
 class HandAssignment:
