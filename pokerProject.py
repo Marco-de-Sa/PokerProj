@@ -134,22 +134,13 @@ class GameDeck:
 
         elif sortingType == "binary insertion":
             def binary_search(arr, val, start, end):
-    
-                # we need to distinguish whether we 
-                # should insert before or after the 
-                # left boundary. imagine [0] is the last 
-                # step of the binary search and we need 
-                # to decide where to insert -1
+                """performs a binary search on the array to find the correct index to insert the value"""
                 if start == end:
                     if int(arr[start].split(" ")[0]) > int(val.split(" ")[0]):
                         return start
                     else:
                         return start+1
 
-                # this occurs if we are moving 
-                # beyond left's boundary meaning 
-                # the left boundary is the least 
-                # position to find a number greater than val
                 if start > end:
                     return start
 
@@ -163,6 +154,7 @@ class GameDeck:
 
 
             def insertion_sort(arr):
+                """performs an insertion sort on the array"""
                 for i in range(1, len(arr)):
                     val = arr[i]
                     j = binary_search(arr, val, 0, i-1)
@@ -230,8 +222,37 @@ class GameDeck:
             merge_sort(diamond, 0, len(diamond) - 1)
 
         elif sortingType == "quick sort":
-            # quick sort code here
-            pass
+            def partition(arr, low, high):
+                """this function partitions the array into two parts"""
+                pivot = arr[high]
+    
+                i = low - 1
+
+                for j in range(low, high):
+                    if int(arr[j].split(" ")[0]) < int(pivot.split(" ")[0]):
+                        i += 1
+                        swap(arr, i, j)
+    
+                swap(arr, i + 1, high)
+                return i + 1
+
+            def swap(arr, i, j):
+                """this function swaps two elements in the array"""
+                arr[i], arr[j] = arr[j], arr[i]
+
+            def quickSort(arr, low, high):
+                """this function sorts the array using the quick sort algorithm"""
+                if low < high:
+                    parind = partition(arr, low, high)
+
+                    quickSort(arr, low, parind - 1)
+                    quickSort(arr, parind + 1, high)
+            
+            quickSort(spade, 0, len(spade) - 1)
+            quickSort(heart, 0, len(heart) - 1)
+            quickSort(club, 0, len(club) - 1)
+            quickSort(diamond, 0, len(diamond) - 1)
+            
         else:
             print("Invalid sorting type, please try again")
         
