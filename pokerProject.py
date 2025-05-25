@@ -49,12 +49,13 @@ class GameDeck:
 
     def sort_cards(self, optional):
         """
-        this method sorts the deck of cards in a specific order using a sorting algorithm chosen by the user
+        this method sorts the deck of cards in a specific order using a sorting algorithm chosen by the user. Leave optional as None to sort the entire deck.
+        The sorting algorithms available are heapsort, binary insertion, merge sort and quick sort.
         """
 
         tempDeck = [] # creates a temporary list
-        if optional == list:
-            tempDeck = optional # makes a copy of the optional list to sort
+        if optional != None:
+            tempDeck = optional.copy() # makes a copy of the optional list to sort
         else:
             tempDeck = self.deck.copy() # makes a copy of the deck to sort
         # the code below is used to replace the face cards with numbers to make sorting easier
@@ -401,21 +402,12 @@ class HandAssignment:
 my_hand = GameDeck() # makes a new object of the GameDeck class
 # my_cards = HandAssignment() # makes a new object of the HandAssignment class
 
-# my_hand.count_suit("hearts")
-# print(my_hand)
+my_hand.count_suit("hearts")
+print(my_hand)
+
+# example for how to sort a dealt hand
 my_hand.shuffle()
-# print(my_hand)
-# tem = my_hand.deal_cards(5)
-# print(my_hand)
-# print(tem)
-# my_hand.rejoin(tem)
 print(my_hand)
-print()
-tem = my_hand.sort_cards(None)
-my_hand.set_deck(tem)
-print(my_hand)
-
-
-# hand = my_hand.deal_cards(5)
-# print("Dealt hand:", hand)
-# HandAssignment.hand_detection(hand)
+tem = my_hand.deal_cards(5)
+tem = my_hand.sort_cards(tem)
+print(tem)
