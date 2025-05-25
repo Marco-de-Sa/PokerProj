@@ -13,7 +13,7 @@ class GameDeck:
 
     __init__: will be automatically used on a new object of this class being made
     count_suit: counts the number of cards belonging to a specific suit that remain in the deck
-    rejoin: will take a list of cards provided by the player and rejoin them into the deck
+    rejoin: will take a list provided and rejoin them into the deck
     deal_cards: deals out the specified number of cards in list form
     sort_deck: allows the user to sort the deck of cards in a specific order using a sorting algorithm chosen by the user
     shuffle: shuffles the deck of cards using the fisher yates method
