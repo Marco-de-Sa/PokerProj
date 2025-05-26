@@ -1,8 +1,5 @@
 from random import randint
 
-# todo add a class dedicated to handling the cards dealt to the player and by extension detecting what hands they have
-# todo add a way to count how many times specific hands have been encountered preferably in the above mentioned player hand class
-
 class GameDeck:
     """
     This is the class that handles all operations that the deck of cards will need to undertake.
@@ -27,7 +24,6 @@ class GameDeck:
 
     def count_suit(self, target):
         """this method counts all the cards belonging to the specified suit"""
-        # warning this method may be vestigial feel free to use it in your code though but please do tell me if you do otherwise I will delete this
         temp = 0 # this variable keeps count of every time a card of target suit is found
         for i in self.deck: # iterates through the deck and checks where the last index is equal to the target String
             if i.split(" ")[-1] == target:
@@ -41,7 +37,6 @@ class GameDeck:
 
     def deal_cards(self, card_count):
         """returns the specified amount of cards"""
-        # todo add a way to sort cards before handing them out
         temp = [] # creates a temporary list
         for i in range(int(card_count)): # converts car_count to an integer and then iterates throughout it
             temp.append(self.deck.pop()) # appends the specified amount(from card_count) to the temp list by popping them from the deck
@@ -87,7 +82,6 @@ class GameDeck:
 
         if sortingType.lower() == "heapsort":
             def heapify(arr, n, i):
-                """builds a heap from the given array"""
                 # Initialize largest as root
                 largest = i 
                 l = 2 * i + 1 
@@ -467,6 +461,8 @@ class PokerGame:
 
 my_hand = GameDeck() # Makes a new object of the GameDeck class
 poker_game = PokerGame() # Makes a new object of the PokerGame class
+
+# very important note: we still need to add the counting of O(n) of each process which also needs to be printed out
 
 # this still needs to be finished and checked over
 # Main game loop
