@@ -83,9 +83,9 @@ class GameDeck:
             if tempDeck[i].split(" ")[2] == "diamonds":
                 diamond.append(tempDeck[i])
         
-        sortingType = input("What type of sorting would you like to use?\n-heapsort\n-binary insertion\n-merge sort\n-quick sort\n")
+        sortingType = input("What type of sorting would you like to use?\n- heapsort\n- binary insertion\n- merge sort\n- quick sort\n")
 
-        if sortingType == "heapsort":
+        if sortingType.lower() == "heapsort":
             def heapify(arr, n, i):
                 """builds a heap from the given array"""
                 # Initialize largest as root
@@ -124,7 +124,7 @@ class GameDeck:
             heapSort(club)
             heapSort(diamond)
 
-        elif sortingType == "binary insertion":
+        elif sortingType.lower() == "binary insertion":
             def binary_search(arr, val, start, end):
                 """performs a binary search on the array to find the correct index to insert the value"""
                 if start == end:
@@ -159,7 +159,7 @@ class GameDeck:
             club = insertion_sort(club)
             diamond = insertion_sort(diamond)
 
-        elif sortingType == "merge sort":
+        elif sortingType.lower() == "merge sort":
             def merge(arr, left, mid, right):
                 n1 = mid - left + 1 # gets left half of the array
                 n2 = right - mid # gets right half of the array
@@ -213,7 +213,7 @@ class GameDeck:
             merge_sort(club, 0, len(club) - 1)
             merge_sort(diamond, 0, len(diamond) - 1)
 
-        elif sortingType == "quick sort":
+        elif sortingType.lower() == "quick sort":
             def partition(arr, low, high):
                 """this function partitions the array into two parts"""
                 pivot = arr[high]
