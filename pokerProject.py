@@ -402,12 +402,33 @@ class HandAssignment:
 my_hand = GameDeck() # makes a new object of the GameDeck class
 # my_cards = HandAssignment() # makes a new object of the HandAssignment class
 
-my_hand.count_suit("hearts")
-print(my_hand)
+# my_hand.count_suit("hearts")
+# print(my_hand)
 
 # example for how to sort a dealt hand
-my_hand.shuffle()
-print(my_hand)
-tem = my_hand.deal_cards(5)
-tem = my_hand.sort_cards(tem)
-print(tem)
+# my_hand.shuffle()
+# print(my_hand)
+# tem = my_hand.deal_cards(5)
+# tem = my_hand.sort_cards(tem)
+# print(tem)
+
+while True:
+    question = input("do you want to:\n- draw cards\n- shuffle deck\n- sort deck\n").lower()
+    if question == "draw cards":
+        try:
+            num = int(input("How many cards do you want to draw: "))
+            if num <= 0:
+                print("Please enter a number above zero.")
+                continue
+            drawn_cards = my_hand.deal_cards(num)
+            print(f"You drew: {drawn_cards}")
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+    elif question == "shuffle deck":
+        my_hand.shuffle()
+        print(f"Shuffled deck: {my_hand}")
+    elif question == "sort deck":
+        my_hand.sort_cards(None)
+        print(f"Sorted deck: {my_hand}")
+    else:
+        print("Invalid option, please try again.")
