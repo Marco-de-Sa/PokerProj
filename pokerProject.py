@@ -546,6 +546,7 @@ while True:
             print(f"Cards in your current hand: {len(poker_game.current_hand)}")
     
     elif question == "rejoin cards to the deck":
+        # maybe still broken?
         if len(poker_game.current_hand) == 0:
             print("No cards in current hand to rejoin to the deck.")
         else:
