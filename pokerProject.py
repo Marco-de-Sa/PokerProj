@@ -467,17 +467,6 @@ class PokerGame:
 
 my_hand = GameDeck() # Makes a new object of the GameDeck class
 poker_game = PokerGame() # Makes a new object of the PokerGame class
-# my_cards = HandAssignment() # Makes a new object of the HandAssignment class
-
-# my_hand.count_suit("hearts")
-# print(my_hand)
-
-# example for how to sort a dealt hand
-# my_hand.shuffle()
-# print(my_hand)
-# tem = my_hand.deal_cards(5)
-# tem = my_hand.sort_cards(tem)
-# print(tem)
 
 # this still needs to be finished and checked over
 # Main game loop
