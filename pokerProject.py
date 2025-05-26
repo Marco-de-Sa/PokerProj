@@ -36,8 +36,8 @@ class GameDeck:
 
     def rejoin(self, hand):
         """this method joins a given list onto the card deck in the class"""
-        for i in range(len(hand)): # takes the iterates through the hand indexes
-            self.deck.append(hand.pop()) # pops each hand value into the deck
+        self.deck.extend(hand)
+        hand.clear()
 
     def deal_cards(self, card_count):
         """returns the specified amount of cards"""
@@ -543,6 +543,9 @@ while True:
             poker_game.current_hand.clear()
             print("Current hand has been rejoined to the deck.")
 
+    elif question == "show statistics":
+        poker_game.show_statistics()
+        
     elif question == "exit":
         print("\nFinal game statistics:")
         poker_game.show_statistics()
