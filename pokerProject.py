@@ -482,7 +482,7 @@ poker_game = PokerGame() # Makes a new object of the PokerGame class
 # this still needs to be finished and checked over
 # Main game loop
 while True:
-    question = input("Do you want to:\n- Draw cards\n- Draw poker hand (5 cards)\n- Show statistics\n- Show deck size\n- Shuffle deck\n- Sort deck\n- Exit\n").lower()
+    question = input("Do you want to:\n- Draw cards\n- Draw poker hand (5 cards)\n- Show statistics\n- Show deck size\n- Shuffle deck\n- Sort deck\n- rejoin cards to the deck\n- Exit\n").lower()
     if question == "draw cards":
         try:
             num = int(input("Input the number of cards you want to draw: "))
@@ -545,6 +545,13 @@ while True:
         if len(poker_game.current_hand) > 0:
             print(f"Cards in your current hand: {len(poker_game.current_hand)}")
     
+    elif question == "rejoin cards to the deck":
+        if len(poker_game.current_hand) == 0:
+            print("No cards in current hand to rejoin to the deck.")
+        else:
+            my_hand.rejoin(poker_game.current_hand)
+            poker_game.current_hand.clear()
+            print("Current hand has been rejoined to the deck.")
 
     elif question == "exit":
         print("\nFinal game statistics:")
