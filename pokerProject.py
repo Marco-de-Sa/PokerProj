@@ -412,6 +412,7 @@ my_hand = GameDeck() # makes a new object of the GameDeck class
 # tem = my_hand.sort_cards(tem)
 # print(tem)
 
+# this still needs to be finished and checked over
 while True:
     question = input("do you want to:\n- draw cards\n- shuffle deck\n- sort deck\n").lower()
     if question == "draw cards":
