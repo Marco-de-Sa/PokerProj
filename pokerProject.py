@@ -83,7 +83,7 @@ class GameDeck:
             if tempDeck[i].split(" ")[2] == "diamonds":
                 diamond.append(tempDeck[i])
         
-        sortingType = input("What type of sorting would you like to use? (heapsort, binary insertion, merge sort or quick sort): ")
+        sortingType = input("What type of sorting would you like to use?\n-heapsort\n-binary insertion\n-merge sort\n-quick sort\n")
 
         if sortingType == "heapsort":
             def heapify(arr, n, i):
