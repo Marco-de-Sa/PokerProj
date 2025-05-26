@@ -414,7 +414,7 @@ my_hand = GameDeck() # makes a new object of the GameDeck class
 
 # this still needs to be finished and checked over
 while True:
-    question = input("do you want to:\n- draw cards\n- shuffle deck\n- sort deck\n").lower()
+    question = input("do you want to:\n- draw cards\n- shuffle deck\n- sort deck\n- exit\n").lower()
     if question == "draw cards":
         try:
             num = int(input("How many cards do you want to draw: "))
@@ -431,5 +431,8 @@ while True:
     elif question == "sort deck":
         my_hand.sort_cards(None)
         print(f"Sorted deck: {my_hand}")
+    elif question == "exit":
+        print("Exiting the game. Goodbye!")
+        break
     else:
         print("Invalid option, please try again.")
