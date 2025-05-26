@@ -303,6 +303,7 @@ class HandAssignment:
 
     __init__: Initializes the HandAssignment class and sets up the hand attribute.
     hand_detection: Detects and assigns the poker hand type for a given hand of cards.
+        - manual_sort: Sorts the hand using a simple bubble sort algorithm.
         - rank_value: Extracts the rank value of a card (e.g., 'king' => 13, '5' => 5).
         - suit: Extracts the suit of a card (e.g., 'hearts', 'clubs').
         - count_ranks: Counts how many times each rank appears in the hand.
@@ -311,96 +312,162 @@ class HandAssignment:
         - hand_assignment: Determines the poker hand category based on the hand.
     """
 
-    def __init__(self):
+    def __init__(self, hand):
         self.hand = hand
-    
-    def set_hand(self, cards):
-        self.hand = cards
 
-    # Hand detection
-    def hand_detection(self, hand):
-        # Extract the rank value of a card (e.g., 'king' => 13, '5' => 5)
+    def hand_detection(self):
+        # Manual sort function
+        def manual_sort(arr):
+            # Simple bubble sort implementation
+            n = len(arr)
+            for i in range(n):
+                for j in range(0, n - i - 1):
+                    if arr[j] > arr[j + 1]:
+                        arr[j], arr[j + 1] = arr[j + 1], arr[j]
+            return arr
+
+        # Extract the rank value of a card
         def rank_value(card):
-                face = card.split()[0]
-                face_cards = {"ace": 14, "jack": 11, "queen": 12, "king": 13}
-                if face in face_cards:
-                    return face_cards[face]
-                elif face.isdigit():
-                    return int(face)
-                else:
-                    print(f"Unrecognized card face: {face}")
+            face = card.split()[0]
+            face_cards = {"ace": 14, "jack": 11, "queen": 12, "king": 13}
+            if face in face_cards:
+                return face_cards[face]
+            elif face.isdigit():
+                return int(face)
+            else:
+                print(f"Unrecognized card face: {face}")
+                return 0
 
-       # Extract the suit of a card (e.g., 'hearts', 'clubs') 
         def suit(card):
             return card.split()[-1]
-        
-        
 
-        # Count how many times each rank appears in the hand
         def count_ranks(cards):
             counts = {}
-            for card in self.hand:
+            for card in cards:
                 val = rank_value(card)
                 counts[val] = counts.get(val, 0) + 1
             return counts
-        
-        # Check if all cards are of the same suit
+
         def check_flush(cards):
-            suits = [suit(card) for card in self.hand]
-            return len(set(suits)) == 1
-        
-         # Check if the hand is a straight (consecutive values)
+            suits = [suit(card) for card in cards]
+            first_suit = suits[0]
+            for i in suits:
+                if i != first_suit:
+                    return False
+            return True
+
         def check_straight(cards):
-            values = sorted([rank_value(card) for card in self.hand])
+            values = [rank_value(card) for card in cards]
+            values = manual_sort(values)
+            
             if len(values) < 5:
                 return False
-            elif values == [2, 3, 4, 5, 14]:
+            
+            # Check for A-2-3-4-5 straight (wheel)
+            if values == [2, 3, 4, 5, 14]:
                 return True
-            return all(values[i] - values[i-1] == 1 for i in range(1,5))
-        
-        # Determine the poker hand category
+            
+            # Check for normal straight
+            for i in range(1, len(values)):
+                if values[i] - values[i-1] != 1:
+                    return False
+            return True
+
         def hand_assignment(cards):
             counts = count_ranks(cards)
-            freq = sorted(counts.values(), reverse=True) #remember to ask mistah agusto about sort
+            freq = list(counts.values())
+            freq = manual_sort(freq)
+            freq.reverse()  # Sort in descending order
+            
             is_flush = check_flush(cards)
             is_straight = check_straight(cards)
-            values = sorted([rank_value(card) for card in self.hand])
+            values = [rank_value(card) for card in cards]
+            values = manual_sort(values)
 
+            # Royal Flush check
             if is_flush and values == [10, 11, 12, 13, 14]:
-                return "Royal Flush"
-            
+                return "Royal Flush", "Flush"
+
+            # Straight Flush check
             if is_flush and is_straight:
-                return "Straight Flush"
+                return "Straight Flush", "Flush", "Straight"
             
+            # Four of a Kind check
             if freq == [4, 1]:
                 return "Four of a Kind"
-            
+
+            # Full House check
             if freq == [3, 2]:
                 return "Full House"
-            
+
+            # Flush check
             if is_flush:
                 return "Flush"
 
+            # Straight check
             if is_straight:
                 return "Straight"
-            
+
+            # Three of a Kind check
             if freq == [3, 1, 1]:
                 return "Three of a Kind"
-            
+
+            # Two Pair check
             if freq == [2, 2, 1]:
                 return "Two Pair"
 
+            # One Pair check
             if freq == [2, 1, 1, 1]:
                 return "One Pair"
-            
-            else:
-                return "No valid poker hand has been given"
-            
+
+            # High Card check
+            return "High Card"
+
         result = hand_assignment(self.hand)
         print(f"Detected hand: {result}")
+        return result
+    
+class PokerGame:
+    """
+    Class to track poker game statistics and handle multiple hands
+    """
+    def __init__(self):
+        self.hand_counts = {
+            "Royal Flush": 0,
+            "Straight Flush": 0,
+            "Four of a Kind": 0,
+            "Full House": 0,
+            "Flush": 0,
+            "Straight": 0,
+            "Three of a Kind": 0,
+            "Two Pair": 0,
+            "One Pair": 0,
+            "High Card": 0
+        }
+        self.current_hand = []
+    
+    # Add hand result to the statistics
+    def add_hand_result(self, hand_type):
+        if hand_type in self.hand_counts:
+            self.hand_counts[hand_type] += 1
+    
+    def show_statistics(self):
+        print("\n==== Poker Game Statistics ====")
+        total_hands = sum(self.hand_counts.values())
+        if total_hands == 0:
+            print("No hands played yet.")
+            return
+        
+        for hand_type, count in self.hand_counts.items():
+            percentage = (count/total_hands) * 100
+            print(f"{hand_type}: {count} ({percentage:.1f}%)")
+        print(f"Total hands played: {total_hands}")
+        print("=" * 30)
 
-my_hand = GameDeck() # makes a new object of the GameDeck class
-# my_cards = HandAssignment() # makes a new object of the HandAssignment class
+
+my_hand = GameDeck() # Makes a new object of the GameDeck class
+poker_game = PokerGame() # Makes a new object of the PokerGame class
+# my_cards = HandAssignment() # Makes a new object of the HandAssignment class
 
 # my_hand.count_suit("hearts")
 # print(my_hand)
@@ -413,26 +480,76 @@ my_hand = GameDeck() # makes a new object of the GameDeck class
 # print(tem)
 
 # this still needs to be finished and checked over
+# Main game loop
 while True:
-    question = input("do you want to:\n- draw cards\n- shuffle deck\n- sort deck\n- exit\n").lower()
+    question = input("Do you want to:\n- Draw cards\n- Draw poker hand (5 cards)\n- Show statistics\n- Show deck size\n- Shuffle deck\n- Sort deck\n- Exit\n").lower()
     if question == "draw cards":
         try:
-            num = int(input("How many cards do you want to draw: "))
+            num = int(input("Input the number of cards you want to draw: "))
             if num <= 0:
                 print("Please enter a number above zero.")
+                continue         
+            elif num > len(my_hand.deck):
+                print(f"Not enough cards in deck! Only {len(my_hand.deck)} cards remaining.")
                 continue
+
             drawn_cards = my_hand.deal_cards(num)
             print(f"You drew: {drawn_cards}")
+
+            # Store current hand for potential return
+            poker_game.current_hand.extend(drawn_cards)
+
+            # If # of cards drawn are exactly 5 cards, offer to assign a hand type
+            if num == 5:
+                analyze = input("Would you like to analyze this as a poker hand? (y/n): ").lower()
+                if analyze == 'y':
+                    hand_checker = HandAssignment(drawn_cards)
+                    hand_type = hand_checker.hand_detection()
+                    poker_game.add_hand_result(hand_type)
+    
         except ValueError:
             print("Invalid input. Please enter a number.")
+
+    elif question == "draw poker hand" or question == "draw poker hand (5 cards)":
+        if len(my_hand.deck) < 5:
+            print(f"Not enough cards in deck for a poker hand! Only {len(my_hand.deck)} cards remaining.")
+            continue
+
+        drawn_cards = my_hand.deal_cards(5)
+        print(f"Your poker hand: {drawn_cards}")
+
+        # Store current hand for potential return
+        poker_game.current_hand = drawn_cards.copy()
+
+        # Automatically assign a hand type
+        hand_checker = HandAssignment(drawn_cards)
+        hand_type = hand_checker.hand_detection()
+        poker_game.add_hand_result(hand_type)
+
     elif question == "shuffle deck":
         my_hand.shuffle()
+        print("Deck has been shuffled!")
         print(f"Shuffled deck: {my_hand}")
+
     elif question == "sort deck":
-        my_hand.sort_cards(None)
-        print(f"Sorted deck: {my_hand}")
+        if len(my_hand.deck) == 0:
+            print("No cards in deck to sort!")
+            continue
+        sorted_deck = my_hand.sort_cards(None)
+        if sorted_deck:
+            print("Deck has been sorted!")
+            print(f"Sorted deck: {my_hand}")
+    
+    elif question == "check deck size":
+        print(f"Cards remaining in deck: {len(my_hand.deck)}")
+        if len(poker_game.current_hand) > 0:
+            print(f"Cards in your current hand: {len(poker_game.current_hand)}")
+    
+
     elif question == "exit":
-        print("Exiting the game. Goodbye!")
+        print("\nFinal game statistics:")
+        poker_game.show_statistics()
+        print("Exiting the game. Thanks for playing! Goodbye!")
         break
     else:
         print("Invalid option, please try again.")
