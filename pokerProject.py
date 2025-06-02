@@ -527,7 +527,7 @@ while True:
             print("Deck has been sorted!")
             print(f"Sorted deck: {sorted_deck}\n")
     
-    elif question == "check deck size":
+    elif question == "show deck size":
         print(f"Cards remaining in deck: {len(my_hand.deck)}")
         if len(poker_game.current_hand) > 0:
             print(f"Cards in your current hand: {len(poker_game.current_hand)}")
