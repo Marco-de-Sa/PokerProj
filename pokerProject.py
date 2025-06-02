@@ -1,12 +1,8 @@
-from random import randint
-
 class GameDeck:
     """
     This is the class that handles all operations that the deck of cards will need to undertake.
     The code that handles the hand of the player will most likely be in a different area.
     A brief description of the methods:
-
-    todo this will probably need rewriting after the class is done
 
     __init__: will be automatically used on a new object of this class being made
     count_suit: counts the number of cards belonging to a specific suit that remain in the deck
@@ -320,8 +316,8 @@ class HandAssignment:
                         arr[j], arr[j + 1] = arr[j + 1], arr[j]
             return arr
 
-        # Extract the rank value of a card
         def rank_value(card):
+            # Extract the rank value of a card
             face = card.split()[0]
             face_cards = {"ace": 14, "jack": 11, "queen": 12, "king": 13}
             if face in face_cards:
@@ -333,9 +329,11 @@ class HandAssignment:
                 return 0
 
         def suit(card):
+            # Extract the suit of a card
             return card.split()[-1]
 
         def count_ranks(cards):
+            # Count how many times each rank appears in the hand
             counts = {}
             for card in cards:
                 val = rank_value(card)
@@ -343,6 +341,7 @@ class HandAssignment:
             return counts
 
         def check_flush(cards):
+            # Check if all cards are of the same suit
             suits = [suit(card) for card in cards]
             first_suit = suits[0]
             for i in suits:
@@ -351,9 +350,11 @@ class HandAssignment:
             return True
 
         def check_straight(cards):
+            # Check if the hand is a straight
             values = [rank_value(card) for card in cards]
             values = manual_sort(values)
             
+            # Straight must have 5 unique values
             if len(values) < 5:
                 return False
             
@@ -424,6 +425,11 @@ class HandAssignment:
 class PokerGame:
     """
     Class to track poker game statistics and handle multiple hands
+    __init__: will be automatically used on a new object of this class being made
+    add_hand_result: Adds a hand result to the statistics.
+    show_statistics: Displays the statistics of the poker game.
+    self.hand_counts: Dictionary to keep track of the count of each hand type.
+    self.current_hand: List to store the current hand of cards.
     """
     def __init__(self):
         self.hand_counts = {
@@ -465,20 +471,24 @@ poker_game = PokerGame() # Makes a new object of the PokerGame class
 
 # very important note: we still need to add the counting of O(n) of each process which also needs to be printed out
 
-# this still needs to be finished and checked over
 # Main game loop
 while True:
-    question = input("Do you want to:\n- Draw cards\n- Draw poker hand (5 cards)\n- Show statistics\n- Show deck size\n- Shuffle deck\n- Sort deck\n- rejoin cards to the deck\n- Exit\n").lower()
+    question = input("Do you want to:\n- Draw cards\n- Draw poker hand (5 cards)\n- Show statistics\n- Show deck size\n- Shuffle deck\n- Sort deck\n- Rejoin cards to the deck\n- Exit\n").lower()
     if question == "draw cards":
         try:
+            # Ask the user how many cards they want to draw
             num = int(input("Input the number of cards you want to draw: "))
+            # Validate the input number
+            # If the number is less than or equal to 0, prompt for a valid number
             if num <= 0:
                 print("Please enter a number above zero.")
-                continue         
+                continue   
+            # If the number is greater than the number of cards in the deck, prompt for a valid number      
             elif num > len(my_hand.deck):
                 print(f"Not enough cards in deck! Only {len(my_hand.deck)} cards remaining.")
                 continue
 
+            # Deal the specified number of cards
             drawn_cards = my_hand.deal_cards(num)
             print(f"You drew: {drawn_cards}")
 
@@ -494,13 +504,16 @@ while True:
                     poker_game.add_hand_result(hand_type)
     
         except ValueError:
+            # Handle non-integer input
             print("Invalid input. Please enter a number.")
 
     elif question == "draw poker hand" or question == "draw poker hand (5 cards)":
+        #If the length of the deck is less than 5, we cannot draw a poker hand
         if len(my_hand.deck) < 5:
             print(f"Not enough cards in deck for a poker hand! Only {len(my_hand.deck)} cards remaining.")
             continue
 
+        #Draw 5 cards
         drawn_cards = my_hand.deal_cards(5)
         print(f"Your poker hand: {drawn_cards}")
 
@@ -513,11 +526,14 @@ while True:
         poker_game.add_hand_result(hand_type)
 
     elif question == "shuffle deck":
+        # Shuffle the deck using the shuffle method
         my_hand.shuffle()
         print("\nDeck has been shuffled!\n")
         print(f"Shuffled deck: {my_hand}\n")
 
     elif question == "sort deck":
+        # Check if there are cards in the deck to sort
+        # If the deck is empty, we cannot sort it
         if len(my_hand.deck) == 0:
             print("No cards in deck to sort!")
             continue
@@ -528,25 +544,31 @@ while True:
             print(f"Sorted deck: {sorted_deck}\n")
     
     elif question == "show deck size":
+        # Display the size of the deck and current hand
         print(f"Cards remaining in deck: {len(my_hand.deck)}")
         if len(poker_game.current_hand) > 0:
             print(f"Cards in your current hand: {len(poker_game.current_hand)}")
     
     elif question == "rejoin cards to the deck":
+        # Checks if there are cards in the current hand to rejoin
         if len(poker_game.current_hand) == 0:
             print("No cards in current hand to rejoin to the deck.")
         else:
+            # Rejoin the current hand to the deck
             my_hand.rejoin(poker_game.current_hand)
             poker_game.current_hand.clear()
             print("Current hand has been rejoined to the deck.")
 
     elif question == "show statistics":
+        # Display the statistics of the poker game
         poker_game.show_statistics()
         
     elif question == "exit":
+        # Exit the game and show final statistics
         print("\nFinal game statistics:")
         poker_game.show_statistics()
         print("Exiting the game. Thanks for playing! Goodbye!")
         break
     else:
+        # Handle invalid input
         print("Invalid option, please try again.")
