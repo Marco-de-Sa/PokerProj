@@ -450,13 +450,14 @@ class PokerGame:
         total_hands = sum(self.hand_counts.values())
         if total_hands == 0:
             print("No hands played yet.")
+            print()
             return
         
         for hand_type, count in self.hand_counts.items():
             percentage = (count/total_hands) * 100
             print(f"{hand_type}: {count} ({percentage:.1f}%)")
         print(f"Total hands played: {total_hands}")
-        print("=" * 30)
+        print("=" * 30 + "\n")
 
 
 my_hand = GameDeck() # Makes a new object of the GameDeck class
@@ -513,17 +514,18 @@ while True:
 
     elif question == "shuffle deck":
         my_hand.shuffle()
-        print("Deck has been shuffled!")
-        print(f"Shuffled deck: {my_hand}")
+        print("\nDeck has been shuffled!\n")
+        print(f"Shuffled deck: {my_hand}\n")
 
     elif question == "sort deck":
         if len(my_hand.deck) == 0:
             print("No cards in deck to sort!")
             continue
         sorted_deck = my_hand.sort_cards(None)
+        my_hand.set_deck(sorted_deck)  # Update the deck with the sorted cards
         if sorted_deck:
             print("Deck has been sorted!")
-            print(f"Sorted deck: {my_hand}")
+            print(f"Sorted deck: {sorted_deck}\n")
     
     elif question == "check deck size":
         print(f"Cards remaining in deck: {len(my_hand.deck)}")
