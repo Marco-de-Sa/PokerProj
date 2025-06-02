@@ -110,7 +110,7 @@ class GameDeck:
                     arr[0], arr[i] = arr[i], arr[0] 
                     # Call max heapify on the reduced heap
                     heapify(arr, i, 0)
-                    # 
+                    
             heapSort(spade)
             heapSort(heart)
             heapSort(club)
