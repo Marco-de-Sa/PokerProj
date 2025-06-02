@@ -1,3 +1,5 @@
+from random import randint
+
 class GameDeck:
     """
     This is the class that handles all operations that the deck of cards will need to undertake.
