@@ -464,7 +464,7 @@ my_hand = GameDeck() # Makes a new object of the GameDeck class
 poker_game = PokerGame() # Makes a new object of the PokerGame class
 
 # very important note: we still need to add the counting of O(n) of each process which also needs to be printed out
-
+my_hand.shuffle() # Shuffles the deck of cards at the start of the game
 # Main game loop
 while True:
     question = input("Do you want to:\n- Draw cards\n- Draw poker hand (5 cards)\n- Show statistics\n- Show deck size\n- Shuffle deck\n- Sort deck\n- Rejoin cards to the deck\n- Exit\n").lower()
