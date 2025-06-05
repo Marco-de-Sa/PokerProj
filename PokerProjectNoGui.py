@@ -1,6 +1,4 @@
 from random import randint
-import tkinter as tk
-from tkinter import messagebox, simpledialog, scrolledtext
 
 class GameDeck:
     """
@@ -34,13 +32,17 @@ class GameDeck:
             temp.append(self.deck.pop()) # appends the specified amount(from card_count) to the temp list by popping them from the deck
         return temp # returns the temp list
 
-    def sort_cards(self, sortingType):
+    def sort_cards(self, optional):
         """
-        this method sorts the deck of cards in a specific order using a sorting algorithm chosen by the user.
+        this method sorts the deck of cards in a specific order using a sorting algorithm chosen by the user. Leave optional as None to sort the entire deck.
         The sorting algorithms available are heapsort, binary insertion, merge sort and quick sort.
         """
+
         tempDeck = [] # creates a temporary list
-        tempDeck = self.deck.copy() # makes a copy of the deck to sort
+        if optional != None:
+            tempDeck = optional.copy() # makes a copy of the optional list to sort
+        else:
+            tempDeck = self.deck.copy() # makes a copy of the deck to sort
         # the code below is used to replace the face cards with numbers to make sorting easier
         # 1 = ace, 11 = jack, 12 = queen, 13 = king
         for i in range(len(tempDeck)):
@@ -65,26 +67,40 @@ class GameDeck:
                 club.append(tempDeck[i])
             if tempDeck[i].split(" ")[2] == "diamonds":
                 diamond.append(tempDeck[i])
+        
+        sortingType = input("What type of sorting would you like to use?\n- heapsort\n- binary insertion\n- merge sort\n- quick sort\n")
 
         if sortingType.lower() == "heapsort":
             def heapify(arr, n, i):
+                # Initialize largest as root
                 largest = i 
                 l = 2 * i + 1 
                 r = 2 * i + 2  
+                # If left child is larger than root
                 if l < n and int(arr[l].split(" ")[0]) > int(arr[largest].split(" ")[0]):
                     largest = l
+                # If right child is larger than largest so far
                 if r < n and int(arr[r].split(" ")[0]) > int(arr[largest].split(" ")[0]):
                     largest = r
+                # If largest is not root
                 if largest != i:
-                    arr[i], arr[largest] = arr[largest], arr[i]
+                    arr[i], arr[largest] = arr[largest], arr[i]  # Swap
+                    # Recursively heapify the affected sub-tree
                     heapify(arr, n, largest)
 
+            # Main function to do heap sort
             def heapSort(arr):
+                """function to perform heap sort where arr is the list to be sorted"""
                 n = len(arr)
+                # Build heap (rearranges the array into a heap)
                 for i in range(n // 2 - 1, -1, -1):
                     heapify(arr, n, i)
+                    
+                # One by one extract an element from heap
                 for i in range(n - 1, 0, -1):
-                    arr[0], arr[i] = arr[i], arr[0]
+                    # Move root to end
+                    arr[0], arr[i] = arr[i], arr[0] 
+                    # Call max heapify on the reduced heap
                     heapify(arr, i, 0)
 
             heapSort(spade)
@@ -94,13 +110,16 @@ class GameDeck:
 
         elif sortingType.lower() == "binary insertion":
             def binary_search(arr, val, start, end):
+                """performs a binary search on the array to find the correct index to insert the value"""
                 if start == end:
                     if int(arr[start].split(" ")[0]) > int(val.split(" ")[0]):
                         return start
                     else:
                         return start+1
+
                 if start > end:
                     return start
+
                 mid = (start+end)//2
                 if int(arr[mid].split(" ")[0]) < int(val.split(" ")[0]):
                     return binary_search(arr, val, mid+1, end)
@@ -109,13 +128,16 @@ class GameDeck:
                 else:
                     return mid
 
+
             def insertion_sort(arr):
+                """performs an insertion sort on the array"""
                 for i in range(1, len(arr)):
                     val = arr[i]
                     j = binary_search(arr, val, 0, i-1)
                     arr = arr[:j] + [val] + arr[j:i] + arr[i+1:]
                 return arr
             
+            # parses each card list into the insertion sort function
             spade = insertion_sort(spade)
             heart = insertion_sort(heart)
             club = insertion_sort(club)
@@ -123,17 +145,24 @@ class GameDeck:
 
         elif sortingType.lower() == "merge sort":
             def merge(arr, left, mid, right):
-                n1 = mid - left + 1
-                n2 = right - mid
+                n1 = mid - left + 1 # gets left half of the array
+                n2 = right - mid # gets right half of the array
+
+                # Create temp arrays
                 L = [0] * n1
                 R = [0] * n2
+
+                # copies subsections of the array into temp arrays
                 for i in range(n1):
                     L[i] = arr[left + i]
                 for j in range(n2):
                     R[j] = arr[mid + 1 + j]
-                i = 0
-                j = 0
-                k = left
+
+                i = 0  # starting index of first subarray
+                j = 0  # starting index of second subarray
+                k = left  # starting index of merged subarray
+
+                # Merge the temp arrays back into arr
                 while i < n1 and j < n2:
                     if int(L[i].split(" ")[0]) <= int(R[j].split(" ")[0]):
                         arr[k] = L[i]
@@ -142,10 +171,14 @@ class GameDeck:
                         arr[k] = R[j]
                         j += 1
                     k += 1
+
+                # Copy the remaining elements of L
                 while i < n1:
                     arr[k] = L[i]
                     i += 1
                     k += 1
+
+                # Copy the remaining elements of R
                 while j < n2:
                     arr[k] = R[j]
                     j += 1
@@ -154,6 +187,7 @@ class GameDeck:
             def merge_sort(arr, left, right):
                 if left < right:
                     mid = (left + right) // 2
+
                     merge_sort(arr, left, mid)
                     merge_sort(arr, mid + 1, right)
                     merge(arr, left, mid, right)
@@ -165,21 +199,28 @@ class GameDeck:
 
         elif sortingType.lower() == "quick sort":
             def partition(arr, low, high):
+                """this function partitions the array into two parts"""
                 pivot = arr[high]
+    
                 i = low - 1
+
                 for j in range(low, high):
                     if int(arr[j].split(" ")[0]) < int(pivot.split(" ")[0]):
                         i += 1
                         swap(arr, i, j)
+    
                 swap(arr, i + 1, high)
                 return i + 1
 
             def swap(arr, i, j):
+                """this function swaps two elements in the array"""
                 arr[i], arr[j] = arr[j], arr[i]
 
             def quickSort(arr, low, high):
+                """this function sorts the array using the quick sort algorithm"""
                 if low < high:
                     parind = partition(arr, low, high)
+
                     quickSort(arr, low, parind - 1)
                     quickSort(arr, parind + 1, high)
             
@@ -418,225 +459,109 @@ class PokerGame:
         print(f"Total hands played: {total_hands}")
         print("=" * 30 + "\n")
 
-class PokerGUI:
-    """
-    This class handles the graphical user interface for the Poker game using Tkinter.
-    It provides buttons for user actions and displays output in a scrolled text area.
-    """
 
-    def __init__(self, root, my_hand, poker_game):
-        # Initialize the GUI with the main window, deck, and game statistics
-        self.root = root
-        self.my_hand = my_hand
-        self.poker_game = poker_game
+my_hand = GameDeck() # Makes a new object of the GameDeck class
+poker_game = PokerGame() # Makes a new object of the PokerGame class
 
-        root.title("Poker Game")
-
-        # Output area for displaying messages to the user
-        self.output = scrolledtext.ScrolledText(root, width=60, height=15, state='disabled')
-        self.output.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
-
-        # Welcome message
-        self.print_output("Welcome to the Poker Game!\nClick a button below to begin.")
-
-        # Buttons for user actions
-        tk.Button(root, text="Draw Cards", width=20, command=self.draw_cards).grid(row=1, column=0, pady=5)
-        tk.Button(root, text="Draw Poker Hand", width=20, command=self.draw_poker_hand).grid(row=1, column=1, pady=5)
-        tk.Button(root, text="Show Statistics", width=20, command=self.show_statistics).grid(row=1, column=2, pady=5)
-        tk.Button(root, text="Show Deck Size", width=20, command=self.show_deck_size).grid(row=2, column=0, pady=5)
-        tk.Button(root, text="Shuffle Deck", width=20, command=self.shuffle_deck).grid(row=2, column=1, pady=5)
-        tk.Button(root, text="Sort Deck", width=20, command=self.sort_deck).grid(row=2, column=2, pady=5)
-        tk.Button(root, text="Rejoin Cards to Deck", width=20, command=self.rejoin_cards).grid(row=3, column=0, pady=5)
-        tk.Button(root, text="Exit", width=20, command=self.exit_game).grid(row=3, column=2, pady=5)
-
-    def print_output(self, text):
-        """
-        Print a message to the output area.
-        """
-        self.output.config(state='normal')
-        self.output.insert(tk.END, text + "\n")
-        self.output.see(tk.END)
-        self.output.config(state='disabled')
-
-    def draw_cards(self):
-        """
-        Draw a user-specified number of cards from the deck.
-        Handles adding to the current hand and optionally analyzes a 5-card hand.
-        """
+my_hand.shuffle() # Shuffles the deck of cards at the start of the game
+# Main game loop
+while True:
+    question = input("Do you want to:\n- Draw cards\n- Draw poker hand (5 cards)\n- Show statistics\n- Show deck size\n- Shuffle deck\n- Sort deck\n- Rejoin cards to the deck\n- Exit\n").lower()
+    if question == "draw cards":
         try:
-            num = simpledialog.askinteger("Draw Cards", "How many cards do you want to draw?", minvalue=1)
-            if num is None:
-                return
-            if num > len(self.my_hand.deck):
-                self.print_output(f"Not enough cards in deck! Only {len(self.my_hand.deck)} cards remaining.")
-                return
-            drawn_cards = self.my_hand.deal_cards(num)
-            self.print_output(f"You drew: {drawn_cards}")
-            # Only add drawn cards to current_hand if current_hand is empty (i.e., no hand is being held)
-            if len(self.poker_game.current_hand) == 0:
-                self.poker_game.current_hand.extend(drawn_cards)
-            else:
-                # If current_hand is not empty, ask user if they want to rejoin old hand to deck
-                if messagebox.askyesno("Replace Hand?", "You already have cards in your hand. Do you want to return them to the deck and draw new cards?"):
-                    self.my_hand.rejoin(self.poker_game.current_hand)
-                    self.poker_game.current_hand.clear()
-                    self.poker_game.current_hand.extend(drawn_cards)
-                else:
-                    # If not, just show the drawn cards but don't add to current_hand
-                    self.print_output("You kept your previous hand. The new cards are not added to your hand.")
+            # Ask the user how many cards they want to draw
+            num = int(input("Input the number of cards you want to draw: "))
+            # Validate the input number
+            # If the number is less than or equal to 0, prompt for a valid number
+            if num <= 0:
+                print("Please enter a number above zero.")
+                continue   
+            # If the number is greater than the number of cards in the deck, prompt for a valid number      
+            elif num > len(my_hand.deck):
+                print(f"Not enough cards in deck! Only {len(my_hand.deck)} cards remaining.")
+                continue
+
+            # Deal the specified number of cards
+            drawn_cards = my_hand.deal_cards(num)
+            print(f"You drew: {drawn_cards}")
+
+            # Store current hand for potential return
+            poker_game.current_hand.extend(drawn_cards)
+
+            # If # of cards drawn are exactly 5 cards, offer to assign a hand type
             if num == 5:
-                analyze = messagebox.askyesno("Analyze Hand", "Would you like to analyze this as a poker hand?")
-                if analyze:
+                analyze = input("Would you like to analyze this as a poker hand? (y/n): ").lower()
+                if analyze == 'y':
                     hand_checker = HandAssignment(drawn_cards)
                     hand_type = hand_checker.hand_detection()
-                    if isinstance(hand_type, tuple):
-                        hand_type = hand_type[0]
-                    self.poker_game.add_hand_result(hand_type)
-        except Exception as e:
-            self.print_output(f"Error: {e}")
+                    poker_game.add_hand_result(hand_type)
+    
+        except ValueError:
+            # Handle non-integer input
+            print("Invalid input. Please enter a number.")
 
-    def draw_poker_hand(self):
-        """
-        Draw a 5-card poker hand from the deck.
-        Handles replacing the current hand and analyzes the hand type.
-        """
-        if len(self.my_hand.deck) < 5:
-            self.print_output(f"Not enough cards in deck for a poker hand! Only {len(self.my_hand.deck)} cards remaining.")
-            return
-        # If current_hand is not empty, ask user if they want to rejoin old hand to deck
-        if len(self.poker_game.current_hand) > 0:
-            if messagebox.askyesno("Replace Hand?", "You already have cards in your hand. Do you want to return them to the deck and draw a new hand?"):
-                self.my_hand.rejoin(self.poker_game.current_hand)
-                self.poker_game.current_hand.clear()
-            else:
-                self.print_output("You kept your previous hand. No new hand was drawn.")
-                return
-        drawn_cards = self.my_hand.deal_cards(5)
-        self.print_output(f"Your poker hand: {drawn_cards}")
-        self.poker_game.current_hand = drawn_cards.copy()
+    elif question == "draw poker hand" or question == "draw poker hand (5 cards)":
+        #If the length of the deck is less than 5, we cannot draw a poker hand
+        if len(my_hand.deck) < 5:
+            print(f"Not enough cards in deck for a poker hand! Only {len(my_hand.deck)} cards remaining.")
+            continue
+
+        #Draw 5 cards
+        drawn_cards = my_hand.deal_cards(5)
+        print(f"Your poker hand: {drawn_cards}")
+
+        # Store current hand for potential return
+        poker_game.current_hand = drawn_cards.copy()
+
+        # Automatically assign a hand type
         hand_checker = HandAssignment(drawn_cards)
         hand_type = hand_checker.hand_detection()
-        if isinstance(hand_type, tuple):
-            hand_type = hand_type[0]
-        self.poker_game.add_hand_result(hand_type)
+        poker_game.add_hand_result(hand_type)
 
-    def show_statistics(self):
-        """
-        Display a window with the statistics of all poker hands played.
-        """
-        stats_win = tk.Toplevel(self.root)
-        stats_win.title("Poker Game Statistics")
-        stats_text = scrolledtext.ScrolledText(stats_win, width=40, height=15, state='normal')
-        stats_text.pack(padx=10, pady=10)
-        total_hands = sum(self.poker_game.hand_counts.values())
-        if total_hands == 0:
-            stats_text.insert(tk.END, "No hands played yet.\n")
+    elif question == "shuffle deck":
+        # Shuffle the deck using the shuffle method
+        my_hand.shuffle()
+        print("\nDeck has been shuffled!\n")
+        print(f"Shuffled deck: {my_hand}\n")
+
+    elif question == "sort deck":
+        # Check if there are cards in the deck to sort
+        # If the deck is empty, we cannot sort it
+        if len(my_hand.deck) == 0:
+            print("No cards in deck to sort!")
+            continue
+        sorted_deck = my_hand.sort_cards(None)
+        my_hand.set_deck(sorted_deck)  # Update the deck with the sorted cards
+        if sorted_deck:
+            print("Deck has been sorted!")
+            print(f"Sorted deck: {sorted_deck}\n")
+    
+    elif question == "show deck size":
+        # Display the size of the deck and current hand
+        print(f"Cards remaining in deck: {len(my_hand.deck)}")
+        if len(poker_game.current_hand) > 0:
+            print(f"Cards in your current hand: {len(poker_game.current_hand)}")
+    
+    elif question == "rejoin cards to the deck":
+        # Checks if there are cards in the current hand to rejoin
+        if len(poker_game.current_hand) == 0:
+            print("No cards in current hand to rejoin to the deck.")
         else:
-            for hand_type, count in self.poker_game.hand_counts.items():
-                percentage = (count / total_hands) * 100
-                stats_text.insert(tk.END, f"{hand_type}: {count} ({percentage:.1f}%)\n")
-            stats_text.insert(tk.END, f"Total hands played: {total_hands}\n")
-        stats_text.config(state='disabled')
+            # Rejoin the current hand to the deck
+            my_hand.rejoin(poker_game.current_hand)
+            poker_game.current_hand.clear()
+            print("Current hand has been rejoined to the deck.")
 
-    def show_deck_size(self):
-        """
-        Show the number of cards remaining in the deck and in the current hand.
-        """
-        self.print_output(f"Cards remaining in deck: {len(self.my_hand.deck)}")
-        if len(self.poker_game.current_hand) > 0:
-            self.print_output(f"Cards in your current hand: {len(self.poker_game.current_hand)}")
-
-    def shuffle_deck(self):
-        """
-        Shuffle the deck and display the shuffled deck.
-        """
-        self.my_hand.shuffle()
-        self.print_output("Deck has been shuffled!")
-        self.print_output(f"Shuffled deck: {self.my_hand}")
-
-    def sort_deck(self):
-        """
-        Sort the deck using a user-selected sorting algorithm.
-        Show a spinner animation for 5 seconds while sorting.
-        """
-        if len(self.my_hand.deck) == 0:
-            self.print_output("No cards in deck to sort!")
-            return
-
-        # Ask for sorting method before starting spinner
-        sortingType = simpledialog.askstring(
-            "Sorting Algorithm",
-            "What type of sorting would you like to use?\n- heapsort\n- binary insertion\n- merge sort\n- quick sort\n",
-            parent=self.root
-        )
-        if sortingType is None or sortingType.strip().lower() not in ["heapsort", "binary insertion", "merge sort", "quick sort"]:
-            self.print_output("Sorting cancelled or invalid sorting type.")
-            return
-
-        self._sortingType = sortingType
-
-        spinner_chars = ['-', '/', '|', '\\']
-        spinner_duration = 2500  # milliseconds
-        spinner_interval = 100   # milliseconds
-        spinner_steps = spinner_duration // spinner_interval
-        self._spinner_index = 0
-        self._spinner_count = 0
-
-        def update_spinner():
-            if self._spinner_count < spinner_steps:
-                char = spinner_chars[self._spinner_index % len(spinner_chars)]
-                self.output.config(state='normal')
-                self.output.delete("end-2l", "end-1l")
-                self.output.insert(tk.END, f"Sorting... {char}\n")
-                self.output.see(tk.END)
-                self.output.config(state='disabled')
-                self._spinner_index += 1
-                self._spinner_count += 1
-                self.root.after(spinner_interval, update_spinner)
-            else:
-                self.output.config(state='normal')
-                self.output.delete("end-2l", "end-1l")
-                self.output.insert(tk.END, "Sorting... done!\n")
-                self.output.config(state='disabled')
-                sorted_deck = self.my_hand.sort_cards(self._sortingType)
-                self.my_hand.set_deck(sorted_deck)
-                if sorted_deck:
-                    self.print_output("Deck has been sorted!")
-                    self.print_output(f"Deck: {sorted_deck}")
-
-        self.output.config(state='normal')
-        self.output.insert(tk.END, "Sorting... -\n")
-        self.output.config(state='disabled')
-        update_spinner()
-
-    def rejoin_cards(self):
-        """
-        Return the current hand to the deck.
-        """
-        if len(self.poker_game.current_hand) == 0:
-            self.print_output("No cards in current hand to rejoin to the deck.")
-        else:
-            self.my_hand.rejoin(self.poker_game.current_hand)
-            self.poker_game.current_hand.clear()
-            self.print_output("Current hand has been rejoined to the deck.")
-
-    def exit_game(self):
-        """
-        Show final statistics and exit the game after a short delay.
-        """
-        total_hands = sum(self.poker_game.hand_counts.values())
-        if total_hands == 0:
-            self.print_output("\nNo hands played. Exiting game.")
-        else:
-            self.print_output("\nFinal game statistics:")
-            self.poker_game.show_statistics()
-        self.root.after(1000, self.root.destroy)
-
-# Launch the GUI
-if __name__ == "__main__":
-    my_hand = GameDeck()
-    poker_game = PokerGame()
-    my_hand.shuffle()
-    root = tk.Tk()
-    app = PokerGUI(root, my_hand, poker_game)
-    root.mainloop()
+    elif question == "show statistics":
+        # Display the statistics of the poker game
+        poker_game.show_statistics()
+        
+    elif question == "exit":
+        # Exit the game and show final statistics
+        print("\nFinal game statistics:")
+        poker_game.show_statistics()
+        print("Exiting the game. Thanks for playing! Goodbye!")
+        break
+    else:
+        # Handle invalid input
+        print("Invalid option, please try again.")
