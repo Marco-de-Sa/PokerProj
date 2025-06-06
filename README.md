@@ -5,7 +5,8 @@ PokerProj is a Python-based project designed for our computation 2 course at Nov
 ## Features
 - Simulate poker games and detect/store encountered hands.
 - Analyze poker hands and calculate percentage of hands that have appeared.
-- multiple types of storage algorithms
+- multiple types of sorting algorithms to choose from when you sort the cards
+- beautiful GUI that displays the output and accepts inputs
 
 ## Installation
 1. Clone the repository:
