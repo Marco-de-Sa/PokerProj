@@ -1,0 +1,25 @@
+# PokerProj
+
+PokerProj is a Python-based project designed for our computation 2 course at Nova IMS.
+
+## Features
+- Simulate poker games and detect/store encountered hands.
+- Analyze poker hands and calculate percentage of hands that have appeared.
+- multiple types of storage algorithms
+
+## Installation
+1. Clone the repository:
+    ```
+    git clone https://github.com/your-username/PokerProj.git
+    ```
+2. Navigate to the project directory:
+    ```
+    cd PokerProj
+    ```
+3. Install dependencies:
+    ```
+    pip install -r requirements.txt
+    ```
+
+## Usage
+Run pokerProject.py to start the application:
