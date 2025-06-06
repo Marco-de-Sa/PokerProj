@@ -472,6 +472,12 @@ class PokerGUI:
                 return
             drawn_cards = self.my_hand.deal_cards(num)
             self.print_output(f"You drew: {drawn_cards}")
+            hand_checker = HandAssignment(drawn_cards)
+            hand_type = hand_checker.hand_detection()
+            self.print_output(f"Detected hand: {hand_type}")
+            if isinstance(hand_type, tuple):
+                hand_type = hand_type[0]
+            self.poker_game.add_hand_result(hand_type)
             # Only add drawn cards to current_hand if current_hand is empty (i.e., no hand is being held)
             if len(self.poker_game.current_hand) == 0:
                 self.poker_game.current_hand.extend(drawn_cards)
@@ -516,6 +522,7 @@ class PokerGUI:
         self.poker_game.current_hand = drawn_cards.copy()
         hand_checker = HandAssignment(drawn_cards)
         hand_type = hand_checker.hand_detection()
+        self.print_output(f"Detected hand: {hand_type}")
         if isinstance(hand_type, tuple):
             hand_type = hand_type[0]
         self.poker_game.add_hand_result(hand_type)
