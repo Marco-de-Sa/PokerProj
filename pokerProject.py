@@ -2,6 +2,11 @@ from random import randint
 import tkinter as tk
 from tkinter import messagebox, simpledialog, scrolledtext
 
+"""
+This is the main file for the poker game project. It has a gui in the class called PokerGUI and it
+contains the GameDeck class which handles the deck of cards and the HandAssignment class which handles the hand of cards.
+"""
+
 class GameDeck:
     """
     This is the class that handles all operations that the deck of cards will need to undertake.
