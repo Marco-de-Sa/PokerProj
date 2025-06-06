@@ -252,11 +252,25 @@ class HandAssignment:
         - count_ranks: Counts how many times each rank appears in the hand.
         - check_flush: Checks if all cards are of the same suit.
         - check_straight: Checks if the hand is a straight (consecutive values).
-        - hand_assignment: Determines the poker hand category based on the hand.
+        - combinations: Generates all possible combinations of cards.
+        - evaluate_5_card_hand: Evaluates a standard 5-card poker hand.
+        - find_best_hand_from_many: Finds the best possible 5-card hand from a larger set of cards.
+        - evaluate_partial_hand: Evaluates hands with less than 5 cards.
+        - log: Helper method to output messages either to GUI or console.
+        - hand_detection: Main method to detect the type of poker hand based on the cards in the hand.
     """
 
-    def __init__(self, hand):
+    def __init__(self, hand, output_callback=None):
         self.hand = hand
+        self.output_callback = output_callback
+    
+    def _log(self, message):
+        # Helper method to output messages either to GUI or console
+        # This allows for flexibility in how messages are displayed.
+        if self.output_callback:
+            self.output_callback(message)
+        else:
+            print(message)
 
     def hand_detection(self):
         # Manual sort function
@@ -278,7 +292,7 @@ class HandAssignment:
             elif face.isdigit():
                 return int(face)
             else:
-                print(f"Unrecognized card face: {face}")
+                self._log(f"Unrecognized card face: {face}")
                 return 0
 
         def suit(card):
@@ -294,7 +308,9 @@ class HandAssignment:
             return counts
 
         def check_flush(cards):
-            # Check if all cards are of the same suit
+            # Check if all cards are of the same suit (only for exactly 5 cards)
+            if len(cards) != 5:
+                return False
             suits = [suit(card) for card in cards]
             first_suit = suits[0]
             for i in suits:
@@ -303,43 +319,67 @@ class HandAssignment:
             return True
 
         def check_straight(cards):
-            # Check if the hand is a straight
-            values = [rank_value(card) for card in cards]
-            values = manual_sort(values)
-            
-            # Straight must have 5 unique values
-            if len(values) < 5:
+            # Check if the hand is a straight (only for exactly 5 cards)
+            if len(cards) != 5:
                 return False
-            
-            # Check for A-2-3-4-5 straight (wheel)
+
+            values = [rank_value(card) for card in cards]
+            values = manual_sort(list(set(values)))  # Remove duplicates and sort
+
+            # Need exactly 5 unique values for a straight
+            if len(values) != 5:
+                return False
+
+            # Check for A-2-3-4-5 straight (wheel) - Ace low
             if values == [2, 3, 4, 5, 14]:
                 return True
-            
-            # Check for normal straight
+
+            # Check for normal straight (consecutive values)
             for i in range(1, len(values)):
-                if values[i] - values[i-1] != 1:
+                if values[i] - values[i - 1] != 1:
                     return False
             return True
 
-        def hand_assignment(cards):
+        def combinations(iterable, r):
+            # Manual combinations function
+            # Generates all combinations of r elements from the iterable
+            pool = tuple(iterable)
+            n = len(pool)
+            if r > n:
+                return
+            indices = list(range(r))
+            yield tuple(pool[i] for i in indices)
+            while True:
+                for i in reversed(range(r)):
+                    if indices[i] != i + n - r:
+                        break
+                else:
+                    return
+                indices[i] += 1
+                for j in range(i + 1, r):
+                    indices[j] = indices[j - 1] + 1
+                yield tuple(pool[i] for i in indices)
+
+        def evaluate_5_card_hand(cards):
+            # Standard 5-card poker hand evaluation
             counts = count_ranks(cards)
             freq = list(counts.values())
             freq = manual_sort(freq)
-            freq.reverse()  # Sort in descending order
-            
+            freq.reverse()
+
             is_flush = check_flush(cards)
             is_straight = check_straight(cards)
             values = [rank_value(card) for card in cards]
             values = manual_sort(values)
 
-            # Royal Flush check
+            # Royal Flush check (highest priority)
             if is_flush and values == [10, 11, 12, 13, 14]:
-                return "Royal Flush", "Flush"
+                return "Royal Flush"
 
             # Straight Flush check
             if is_flush and is_straight:
-                return "Straight Flush", "Flush", "Straight"
-            
+                return "Straight Flush"
+
             # Four of a Kind check
             if freq == [4, 1]:
                 return "Four of a Kind"
@@ -367,12 +407,82 @@ class HandAssignment:
             # One Pair check
             if freq == [2, 1, 1, 1]:
                 return "One Pair"
-
-            # High Card check
+            
+            # High Card check (default case)
             return "High Card"
 
-        result = hand_assignment(self.hand)
-        print(f"Detected hand: {result}")
+        def find_best_hand_from_many(cards):
+            # Find the best possible 5-card hand from a larger set
+            best_hand = "High Card"
+            best_rank = 10  # High Card is rank 10 (lowest)
+
+            # Hand rankings for comparison (lower number = better hand)
+            hand_rankings = {
+                "Royal Flush": 1,
+                "Straight Flush": 2,
+                "Four of a Kind": 3,
+                "Full House": 4,
+                "Flush": 5,
+                "Straight": 6,
+                "Three of a Kind": 7,
+                "Two Pair": 8,
+                "One Pair": 9,
+                "High Card": 10
+            }
+
+            self._log(f"Evaluating {len(cards)} cards to find the best 5-card hand...")
+            combinations_checked = 0
+
+            # Generate all possible 5-card combinations
+            for combo in combinations(cards, 5):
+                hand_type = evaluate_5_card_hand(list(combo))
+                hand_rank = hand_rankings[hand_type]
+                combinations_checked += 1
+
+                if hand_rank < best_rank:
+                    best_hand = hand_type
+                    best_rank = hand_rank
+                    self._log(f"New best hand found: {best_hand}")
+
+                # If we found a Royal Flush, there's no need to check further
+                if best_hand == "Royal Flush":
+                    break
+
+            self._log(f"Checked {combinations_checked} combinations. \nBest hand: {best_hand}")
+            return best_hand
+
+        def evaluate_partial_hand(cards):
+            # Evaluate hands with less than 5 cards
+            counts = count_ranks(cards)
+            freq = list(counts.values())
+            freq = manual_sort(freq)
+            freq.reverse()
+
+            pairs = freq.count(2)
+            threes = freq.count(3)
+            fours = freq.count(4)
+
+            if fours >= 1:
+                return "Four of a Kind"
+            if threes >= 1 and pairs >= 1:
+                return "Full House"
+            if threes >= 1:
+                return "Three of a Kind"
+            if pairs >= 2:
+                return "Two Pair"
+            if pairs >= 1:
+                return "One Pair"
+
+            return "High Card"
+
+        # Main evaluation logic
+        if len(self.hand) == 5:
+            result = evaluate_5_card_hand(self.hand)
+        elif len(self.hand) > 5:
+            result = find_best_hand_from_many(self.hand)
+        else:
+            result = evaluate_partial_hand(self.hand)
+            
         return result
     
 class PokerGame:
@@ -470,34 +580,48 @@ class PokerGUI:
             if num > len(self.my_hand.deck):
                 self.print_output(f"Not enough cards in deck! Only {len(self.my_hand.deck)} cards remaining.")
                 return
+
             drawn_cards = self.my_hand.deal_cards(num)
             self.print_output(f"You drew: {drawn_cards}")
+
+            # Analyze the hand once
             hand_checker = HandAssignment(drawn_cards)
             hand_type = hand_checker.hand_detection()
             self.print_output(f"Detected hand: {hand_type}")
+
+            # Pass the output callback to HandAssignment
+            hand_checker = HandAssignment(drawn_cards, self.print_output)
+            hand_type = hand_checker.hand_detection()
+
+            # Handle tuple return (if your hand_detection still returns tuples)
             if isinstance(hand_type, tuple):
                 hand_type = hand_type[0]
+
+            # Add to statistics
             self.poker_game.add_hand_result(hand_type)
-            # Only add drawn cards to current_hand if current_hand is empty (i.e., no hand is being held)
+
+            # Handle current hand management
             if len(self.poker_game.current_hand) == 0:
                 self.poker_game.current_hand.extend(drawn_cards)
             else:
                 # If current_hand is not empty, ask user if they want to rejoin old hand to deck
-                if messagebox.askyesno("Replace Hand?", "You already have cards in your hand. Do you want to return them to the deck and draw new cards?"):
+                if messagebox.askyesno("Replace Hand?",
+                                       "You already have cards in your hand. Do you want to return them to the deck and draw new cards?"):
                     self.my_hand.rejoin(self.poker_game.current_hand)
                     self.poker_game.current_hand.clear()
                     self.poker_game.current_hand.extend(drawn_cards)
                 else:
                     # If not, just show the drawn cards but don't add to current_hand
                     self.print_output("You kept your previous hand. The new cards are not added to your hand.")
+
+            # Only ask about additional analysis if it's exactly 5 cards AND user wants extra confirmation
             if num == 5:
-                analyze = messagebox.askyesno("Analyze Hand", "Would you like to analyze this as a poker hand?")
+                analyze = messagebox.askyesno("Analyze Hand",
+                                              "Would you like to see detailed analysis of this poker hand?")
                 if analyze:
-                    hand_checker = HandAssignment(drawn_cards)
-                    hand_type = hand_checker.hand_detection()
-                    if isinstance(hand_type, tuple):
-                        hand_type = hand_type[0]
-                    self.poker_game.add_hand_result(hand_type)
+                    # Don't re-analyze, just show more details about the already-detected hand
+                    self.print_output(f"Detailed analysis: This is a {hand_type} hand.")
+
         except Exception as e:
             self.print_output(f"Error: {e}")
 
@@ -520,7 +644,7 @@ class PokerGUI:
         drawn_cards = self.my_hand.deal_cards(5)
         self.print_output(f"Your poker hand: {drawn_cards}")
         self.poker_game.current_hand = drawn_cards.copy()
-        hand_checker = HandAssignment(drawn_cards)
+        hand_checker = HandAssignment(drawn_cards, self.print_output)
         hand_type = hand_checker.hand_detection()
         self.print_output(f"Detected hand: {hand_type}")
         if isinstance(hand_type, tuple):
