@@ -580,7 +580,12 @@ class PokerGUI:
         """
         try:
             num = simpledialog.askinteger("Draw Cards", "How many cards do you want to draw?", minvalue=1)
+            
             if num is None:
+                self.print_output("Card drawing cancelled.")
+                return
+            if num < 3:
+                self.print_output("You must draw at least 3 cards to analyze a hand.")
                 return
             if num > len(self.my_hand.deck):
                 self.print_output(f"Not enough cards in deck! Only {len(self.my_hand.deck)} cards remaining.")
@@ -618,14 +623,6 @@ class PokerGUI:
                 else:
                     # If not, just show the drawn cards but don't add to current_hand
                     self.print_output("You kept your previous hand. The new cards are not added to your hand.")
-
-            # Only ask about additional analysis if it's exactly 5 cards AND user wants extra confirmation
-            if num == 5:
-                analyze = messagebox.askyesno("Analyze Hand",
-                                              "Would you like to see detailed analysis of this poker hand?")
-                if analyze:
-                    # Don't re-analyze, just show more details about the already-detected hand
-                    self.print_output(f"Detailed analysis: This is a {hand_type} hand.")
 
         except Exception as e:
             self.print_output(f"Error: {e}")
