@@ -30,7 +30,7 @@ hand is straight, a flush, as well as the suits of the cards. The most important
 sub-function, in my opinion, is the final function, called hand assignment. As
 the name implies, it puts all of the previous functions together to determine the
 user’s hand.
-3 Analysis of the HandAssignment Class
+## 3 Analysis of the HandAssignment Class
 The class HandAssigment is responsible for finding the different poker hands.
 Inside, there are two methods, init and hand detection, the former being the
 constructor and the latter being the one that actually does any sort of work.
