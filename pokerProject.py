@@ -584,11 +584,11 @@ class PokerGUI:
             if num is None:
                 self.print_output("Card drawing cancelled.")
                 return
-            if num < 3:
+            elif num < 3:
                 self.print_output("You must draw at least 3 cards to analyze a hand.")
                 return
-            if num > len(self.my_hand.deck):
-                self.print_output(f"Not enough cards in deck! Only {len(self.my_hand.deck)} cards remaining.")
+            elif num > 15:
+                self.print_output("You can only draw up to 15 cards at a time.")
                 return
 
             drawn_cards = self.my_hand.deal_cards(num)
