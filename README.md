@@ -17,10 +17,6 @@ PokerProj is a Python-based project designed for our computation 2 course at Nov
     ```
     cd PokerProj
     ```
-3. Install dependencies:
-    ```
-    pip install -r requirements.txt
-    ```
 
 ## Usage
 Run pokerProject.py to start the application:
