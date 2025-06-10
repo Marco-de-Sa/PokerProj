@@ -263,7 +263,7 @@ class GameDeck:
         return tempDeck # returns the sorted deck
 
     def set_deck(self, newDeck):
-        """this method makes the deck equal to the newDeck provided"""
+        """this method makes the deck equal to the new_deck provided"""
         self.deck = newDeck
 
     def shuffle(self):

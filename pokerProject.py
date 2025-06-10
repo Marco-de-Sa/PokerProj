@@ -39,7 +39,7 @@ class GameDeck:
             temp.append(self.deck.pop()) # appends the specified amount(from card_count) to the temp list by popping them from the deck
         return temp # returns the temp list
 
-    def sort_cards(self, sortingType):
+    def sort_cards(self, sorting_type):
         """
         this method sorts the deck of cards in a specific order using a sorting algorithm chosen by the user.
         The sorting algorithms available are heapsort, binary insertion, merge sort and quick sort.
@@ -71,7 +71,7 @@ class GameDeck:
             if tempDeck[i].split(" ")[2] == "diamonds":
                 diamond.append(tempDeck[i])
 
-        if sortingType.lower() == "heapsort":
+        if sorting_type.lower() == "heapsort":
             def heapify(arr, n, i):
                 largest = i 
                 l = 2 * i + 1 
@@ -84,7 +84,7 @@ class GameDeck:
                     arr[i], arr[largest] = arr[largest], arr[i]
                     heapify(arr, n, largest)
 
-            def heapSort(arr):
+            def heap_sort(arr):
                 n = len(arr)
                 for i in range(n // 2 - 1, -1, -1):
                     heapify(arr, n, i)
@@ -92,12 +92,12 @@ class GameDeck:
                     arr[0], arr[i] = arr[i], arr[0]
                     heapify(arr, i, 0)
 
-            heapSort(spade)
-            heapSort(heart)
-            heapSort(club)
-            heapSort(diamond)
+            heap_sort(spade)
+            heap_sort(heart)
+            heap_sort(club)
+            heap_sort(diamond)
 
-        elif sortingType.lower() == "binary insertion":
+        elif sorting_type.lower() == "binary insertion":
             def binary_search(arr, val, start, end):
                 if start == end:
                     if int(arr[start].split(" ")[0]) > int(val.split(" ")[0]):
@@ -126,7 +126,7 @@ class GameDeck:
             club = insertion_sort(club)
             diamond = insertion_sort(diamond)
 
-        elif sortingType.lower() == "merge sort":
+        elif sorting_type.lower() == "merge sort":
             def merge(arr, left, mid, right):
                 n1 = mid - left + 1
                 n2 = right - mid
@@ -168,7 +168,7 @@ class GameDeck:
             merge_sort(club, 0, len(club) - 1)
             merge_sort(diamond, 0, len(diamond) - 1)
 
-        elif sortingType.lower() == "quick sort":
+        elif sorting_type.lower() == "quick sort":
             def partition(arr, low, high):
                 pivot = arr[high]
                 i = low - 1
@@ -182,21 +182,21 @@ class GameDeck:
             def swap(arr, i, j):
                 arr[i], arr[j] = arr[j], arr[i]
 
-            def quickSort(arr, low, high):
+            def quick_sort(arr, low, high):
                 if low < high:
                     parind = partition(arr, low, high)
-                    quickSort(arr, low, parind - 1)
-                    quickSort(arr, parind + 1, high)
+                    quick_sort(arr, low, parind - 1)
+                    quick_sort(arr, parind + 1, high)
             
-            quickSort(spade, 0, len(spade) - 1)
-            quickSort(heart, 0, len(heart) - 1)
-            quickSort(club, 0, len(club) - 1)
-            quickSort(diamond, 0, len(diamond) - 1)
+            quick_sort(spade, 0, len(spade) - 1)
+            quick_sort(heart, 0, len(heart) - 1)
+            quick_sort(club, 0, len(club) - 1)
+            quick_sort(diamond, 0, len(diamond) - 1)
 
         else:
             print("Invalid sorting type, please try again")
         
-        def redoCards(temp): # replaces the numbers back to their face values
+        def redo_cards(temp): # replaces the numbers back to their face values
             # 1 = ace, 11 = jack, 12 = queen, 13 = king
             for i in range(len(temp)):
                 if temp[i].split(" ")[0] == "1":
@@ -209,10 +209,10 @@ class GameDeck:
                     temp[i] = f"king {temp[i].split(' ')[1]} {temp[i].split(' ')[2]}"
             return temp
         
-        spade = redoCards(spade)
-        heart = redoCards(heart)
-        club = redoCards(club)
-        diamond = redoCards(diamond)
+        spade = redo_cards(spade)
+        heart = redo_cards(heart)
+        club = redo_cards(club)
+        diamond = redo_cards(diamond)
 
         tempDeck = []
         for i in spade:
@@ -226,9 +226,9 @@ class GameDeck:
         
         return tempDeck # returns the sorted deck
 
-    def set_deck(self, newDeck):
-        """this method makes the deck equal to the newDeck provided"""
-        self.deck = newDeck
+    def set_deck(self, new_deck):
+        """this method makes the deck equal to the new_deck provided"""
+        self.deck = new_deck
 
     def shuffle(self):
         """shuffles the deck of cards"""
@@ -541,6 +541,8 @@ class PokerGUI:
 
     def __init__(self, root, my_hand, poker_game):
         # Initialize the GUI with the main window, deck, and game statistics
+        self._spinner_count = 0
+        self._spinner_index = 0
         self.root = root
         self.my_hand = my_hand
         self.poker_game = poker_game
@@ -712,8 +714,6 @@ class PokerGUI:
         spinner_duration = 2500  # milliseconds
         spinner_interval = 100   # milliseconds
         spinner_steps = spinner_duration // spinner_interval
-        self._spinner_index = 0
-        self._spinner_count = 0
 
         def update_spinner():
             if self._spinner_count < spinner_steps:
