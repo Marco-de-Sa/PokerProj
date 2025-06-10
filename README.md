@@ -20,10 +20,10 @@ until the user prompts to exit, displaying the statistics of the game alonsgide 
 goodbye message.
 Arguably the most important function in the program is the sort cards function, which, as the name implies, sorts the cards using the sorting method of
 the user’s choice, with the options being:
-- Binary Insertion Sort
-- Heapsort
-- Merge Sort
-- Quick Sort
+  - Binary Insertion Sort
+  - Heapsort
+  - Merge Sort
+  - Quick Sort
 There is also the hand detection function, which is essentially the entire HandAssignment class in a single function. It contains sub-functions that are essen1
 tial to determining the user’s hand, such as functions that determine whether a
 hand is straight, a flush, as well as the suits of the cards. The most important
