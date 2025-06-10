@@ -30,7 +30,9 @@ hand is straight, a flush, as well as the suits of the cards. The most important
 sub-function, in my opinion, is the final function, called hand assignment. As
 the name implies, it puts all of the previous functions together to determine the
 user’s hand.
+
 ## 3 Analysis of the HandAssignment Class
+
 The class HandAssigment is responsible for finding the different poker hands.
 Inside, there are two methods, init and hand detection, the former being the
 constructor and the latter being the one that actually does any sort of work.
@@ -114,6 +116,8 @@ Figure 1: Screenshot of thee GUI
 The GUI uses tkinter as the framework, which is imported at the beginning
 of the program. Specifically, messagebox, simpledialog and scrolledtext are the
 packages from tkinter we use in this program.
-7 How To Run The Project
+
+## 7 How To Run The Project
+
 All of the code is self-contained in pokerProject.py. Running that file will run
 the program.
